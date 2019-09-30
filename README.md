@@ -1,1 +1,1 @@
-# juicy-whammy
+# JuicyWhammy
