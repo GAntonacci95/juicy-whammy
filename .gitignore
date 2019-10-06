@@ -15,6 +15,7 @@ DFXerPlug/Builds/MacOSX/DerivedData
 
 # temp ignored libs
 Libs/Sources/SoundTouch/DerivedData
+Libs/Sources/.smbPitchShiftProject-renew
 
 # dependencies
 
