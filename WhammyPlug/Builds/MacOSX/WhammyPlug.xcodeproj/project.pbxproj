@@ -59,9 +59,6 @@
 		4281AA9823491A3B0034355F /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEFD96BDF3ECEF7CC4859BB0 /* OpenGL.framework */; };
 		4281AA9923491A3B0034355F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C06D4975B3E51FDF8C70877 /* QuartzCore.framework */; };
 		4281AA9A23491A3B0034355F /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2986874F3931203E26671509 /* WebKit.framework */; };
-		4281AAA62349D4720034355F /* SuperpoweredAudioOSX.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4281AAA52349D4720034355F /* SuperpoweredAudioOSX.a */; };
-		4281AAA72349D4720034355F /* SuperpoweredAudioOSX.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4281AAA52349D4720034355F /* SuperpoweredAudioOSX.a */; };
-		4281AAA82349D4720034355F /* SuperpoweredAudioOSX.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4281AAA52349D4720034355F /* SuperpoweredAudioOSX.a */; };
 		43B42A57071818ECE3842FFC /* include_juce_audio_plugin_client_VST_utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = B464934759A31D76EE626B0C /* include_juce_audio_plugin_client_VST_utils.mm */; };
 		480D44554A776314FB077D19 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2986874F3931203E26671509 /* WebKit.framework */; };
 		4896FEB357961E5B7052B40D /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4A162A6FAC16B4995108FC9 /* Carbon.framework */; };
@@ -136,7 +133,6 @@
 		3880B94CA0FA37AFBFCCE4E1 /* include_juce_cryptography.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_cryptography.mm; path = ../../JuceLibraryCode/include_juce_cryptography.mm; sourceTree = SOURCE_ROOT; };
 		3D4FFA0C2DBCC901730890C7 /* AppConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppConfig.h; path = ../../JuceLibraryCode/AppConfig.h; sourceTree = SOURCE_ROOT; };
 		3FB07CDD4CF0463055BE1488 /* juce_audio_plugin_client */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_plugin_client; path = /Users/gabrieleantonacci/Documents/JUCE/modules/juce_audio_plugin_client; sourceTree = "<absolute>"; };
-		4281AAA52349D4720034355F /* SuperpoweredAudioOSX.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = SuperpoweredAudioOSX.a; path = ../../../Libs/Builds/MacOSX/Superpowered/SuperpoweredAudioOSX.a; sourceTree = "<group>"; };
 		42DB65B4369FEBF779D5D5A8 /* Info-Standalone_Plugin.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-Standalone_Plugin.plist"; sourceTree = SOURCE_ROOT; };
 		43453E5FE4F80F4554A15E7D /* DiscRecording.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiscRecording.framework; path = System/Library/Frameworks/DiscRecording.framework; sourceTree = SDKROOT; };
 		46D5C9E57A59C0FFBF00B70E /* juce_data_structures */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_data_structures; path = /Users/gabrieleantonacci/Documents/JUCE/modules/juce_data_structures; sourceTree = "<absolute>"; };
@@ -199,7 +195,6 @@
 				751A8A59606CE636A067BACB /* Cocoa.framework in Frameworks */,
 				A09077EEB0355A6F4242D032 /* CoreAudio.framework in Frameworks */,
 				10F2EEF6394018F1965E883E /* CoreAudioKit.framework in Frameworks */,
-				4281AAA62349D4720034355F /* SuperpoweredAudioOSX.a in Frameworks */,
 				90E0B9EEAF904545C093E430 /* CoreMIDI.framework in Frameworks */,
 				D56FD8779C2CDACD2B1ACFB5 /* DiscRecording.framework in Frameworks */,
 				BA2F245AFA38FFFF91D78184 /* IOKit.framework in Frameworks */,
@@ -219,7 +214,6 @@
 				4281AA9223491A3B0034355F /* Cocoa.framework in Frameworks */,
 				4281AA9323491A3B0034355F /* CoreAudio.framework in Frameworks */,
 				4281AA9423491A3B0034355F /* CoreAudioKit.framework in Frameworks */,
-				4281AAA82349D4720034355F /* SuperpoweredAudioOSX.a in Frameworks */,
 				4281AA9523491A3B0034355F /* CoreMIDI.framework in Frameworks */,
 				4281AA9623491A3B0034355F /* DiscRecording.framework in Frameworks */,
 				4281AA9723491A3B0034355F /* IOKit.framework in Frameworks */,
@@ -239,7 +233,6 @@
 				4281AA8423491A3B0034355F /* Carbon.framework in Frameworks */,
 				4281AA8523491A3B0034355F /* Cocoa.framework in Frameworks */,
 				4281AA8623491A3B0034355F /* CoreAudio.framework in Frameworks */,
-				4281AAA72349D4720034355F /* SuperpoweredAudioOSX.a in Frameworks */,
 				4281AA8723491A3B0034355F /* CoreAudioKit.framework in Frameworks */,
 				4281AA8823491A3B0034355F /* CoreMIDI.framework in Frameworks */,
 				4281AA8923491A3B0034355F /* DiscRecording.framework in Frameworks */,
@@ -342,7 +335,6 @@
 		7E9CD53C8507BD803890FF63 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4281AAA52349D4720034355F /* SuperpoweredAudioOSX.a */,
 				029EE2BDD16D64671EAF5579 /* Accelerate.framework */,
 				854B0102D92DF5D3BE5159E0 /* AudioToolbox.framework */,
 				51B69BE719533C20B31F197D /* AudioUnit.framework */,
@@ -741,7 +733,6 @@
 					/Users/gabrieleantonacci/Documents/JUCE/modules,
 					/Users/gabrieleantonacci/Documents/JUCE/modules/juce_audio_plugin_client,
 					"$(inherited)",
-					../../../Libs/Builds/MacOSX/Superpowered,
 				);
 				INFOPLIST_FILE = "Info-Standalone_Plugin.plist";
 				INFOPLIST_PREPROCESS = NO;
@@ -831,7 +822,6 @@
 					/Users/gabrieleantonacci/Documents/JUCE/modules,
 					/Users/gabrieleantonacci/Documents/JUCE/modules/juce_audio_plugin_client,
 					"$(inherited)",
-					../../../Libs/Builds/MacOSX/Superpowered,
 				);
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
@@ -878,7 +868,6 @@
 					/Users/gabrieleantonacci/Documents/JUCE/modules,
 					/Users/gabrieleantonacci/Documents/JUCE/modules/juce_audio_plugin_client,
 					"$(inherited)",
-					../../../Libs/Builds/MacOSX/Superpowered,
 				);
 				INFOPLIST_FILE = "Info-AU.plist";
 				INFOPLIST_PREPROCESS = NO;
@@ -931,7 +920,6 @@
 					/Users/gabrieleantonacci/Documents/JUCE/modules,
 					/Users/gabrieleantonacci/Documents/JUCE/modules/juce_audio_plugin_client,
 					"$(inherited)",
-					../../../Libs/Builds/MacOSX/Superpowered,
 				);
 				INFOPLIST_FILE = "Info-Standalone_Plugin.plist";
 				INFOPLIST_PREPROCESS = NO;
@@ -1027,7 +1015,6 @@
 					/Users/gabrieleantonacci/Documents/JUCE/modules,
 					/Users/gabrieleantonacci/Documents/JUCE/modules/juce_audio_plugin_client,
 					"$(inherited)",
-					../../../Libs/Builds/MacOSX/Superpowered,
 				);
 				INFOPLIST_FILE = "Info-VST3.plist";
 				INFOPLIST_PREPROCESS = NO;
@@ -1082,7 +1069,6 @@
 					/Users/gabrieleantonacci/Documents/JUCE/modules,
 					/Users/gabrieleantonacci/Documents/JUCE/modules/juce_audio_plugin_client,
 					"$(inherited)",
-					../../../Libs/Builds/MacOSX/Superpowered,
 				);
 				INFOPLIST_FILE = "Info-VST3.plist";
 				INFOPLIST_PREPROCESS = NO;
@@ -1144,7 +1130,6 @@
 					/Users/gabrieleantonacci/Documents/JUCE/modules,
 					/Users/gabrieleantonacci/Documents/JUCE/modules/juce_audio_plugin_client,
 					"$(inherited)",
-					../../../Libs/Builds/MacOSX/Superpowered,
 				);
 				INFOPLIST_FILE = "Info-AU.plist";
 				INFOPLIST_PREPROCESS = NO;
@@ -1206,7 +1191,6 @@
 					/Users/gabrieleantonacci/Documents/JUCE/modules,
 					/Users/gabrieleantonacci/Documents/JUCE/modules/juce_audio_plugin_client,
 					"$(inherited)",
-					../../../Libs/Builds/MacOSX/Superpowered,
 				);
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				LLVM_LTO = YES;
