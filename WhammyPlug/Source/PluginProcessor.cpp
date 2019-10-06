@@ -10,6 +10,10 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "Superpowered.h"
+#include "SuperpoweredTimeStretching.h"
+
+Superpowered::TimeStretching *shifter;
 
 //==============================================================================
 WhammyPlugAudioProcessor::WhammyPlugAudioProcessor()
@@ -97,12 +101,16 @@ void WhammyPlugAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+    Superpowered::Initialize("", false, false, false, false, false, false, false);
+    shifter = new Superpowered::TimeStretching(sampleRate);
 }
 
 void WhammyPlugAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
+    shifter->reset();
+    shifter->~TimeStretching();
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -150,12 +158,23 @@ void WhammyPlugAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        auto* channelData = buffer.getWritePointer (channel);
-
-        // ..do something to the data...
-    }
+//    for (int channel = 0; channel < totalNumInputChannels; ++channel)
+//    {
+//        auto* channelData = buffer.getWritePointer (channel);
+//
+//        // ..do something to the data...
+//    }
+    float *inter_stereo = new float[2*buffer.getNumSamples()];
+    // tra tutti i buffer disponibili crea interlacciamento stereo coi 2 canali default
+    AudioDataConverters::interleaveSamples(
+       buffer.getArrayOfReadPointers(), inter_stereo, buffer.getNumSamples(), 2);
+    
+    shifter->addInput(inter_stereo, 1); // o forse 2?!
+    // permane da manipolare la proprietà
+    shifter->pitchShiftCents = -200; // es, necessaria parametrizzazione
+    shifter->getOutput(inter_stereo, 1);
+    // de-interlacciare e scrivere in output
+    AudioDataConverters::deinterleaveSamples(inter_stereo, buffer.getArrayOfWritePointers(), buffer.getNumSamples(), 2);
 }
 
 //==============================================================================

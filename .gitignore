@@ -1,9 +1,17 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/InstrumentalBoard/Builds
-/WhammyPlug/Builds
-/DFXerPlug/Builds
+/InstrumentalBoard/Builds/MacOSX/build
+# /InstrumentalBoard/Builds/VisualStudio2019/?
+/WhammyPlug/Builds/MacOSX/build
+# /WhammyPlug/Builds/VisualStudio2019/?
+/DFXerPlug/Builds/MacOSX/build
+# /DFXerPlug/Builds/VisualStudio2019/?
+
+# temp ignored libs
+/Libs/Sources/s*
+/Libs/Sources/SuperpoweredSDK/Examples_*
+
 
 # dependencies
 
