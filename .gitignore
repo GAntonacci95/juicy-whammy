@@ -9,9 +9,10 @@
 # /DFXerPlug/Builds/VisualStudio2019/?
 
 # temp ignored libs
-/Libs/Sources/s*
+/Libs/Sources/smbPitchShiftProject-renew
+/Libs/Sources/soundtouch*
 /Libs/Sources/SuperpoweredSDK/Examples_*
-
+/Libs/Sources/SuperpoweredSDK/*e*
 
 # dependencies
 
