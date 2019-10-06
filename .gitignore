@@ -2,11 +2,14 @@
 
 # compiled output
 InstrumentalBoard/Builds/MacOSX/build
-# InstrumentalBoard/Builds/VisualStudio2019/?
+InstrumentalBoard/Builds/VisualStudio2019/Debug
+InstrumentalBoard/Builds/VisualStudio2019/x64/Debug
 WhammyPlug/Builds/MacOSX/build
-# WhammyPlug/Builds/VisualStudio2019/?
+WhammyPlug/Builds/VisualStudio2019/Debug
+WhammyPlug/Builds/VisualStudio2019/x64/Debug
 DFXerPlug/Builds/MacOSX/build
-# DFXerPlug/Builds/VisualStudio2019/?
+DFXerPlug/Builds/VisualStudio2019/Debug
+DFXerPlug/Builds/VisualStudio2019/x64/Debug
 
 # XCode preference
 InstrumentalBoard/Builds/MacOSX/DerivedData
@@ -16,6 +19,9 @@ DFXerPlug/Builds/MacOSX/DerivedData
 # temp ignored libs
 Libs/Sources/SoundTouch/DerivedData
 Libs/Sources/.smbPitchShiftProject-renew
+
+Libs/Sources/SoundTouch/SoundTouch.vs/Debug
+Libs/Sources/SoundTouch/SoundTouch.vs/x64/Debug
 
 # dependencies
 
@@ -35,6 +41,9 @@ Libs/Sources/.smbPitchShiftProject-renew
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+#IDE - VS
+.vs
 
 # misc
 /.sass-cache
