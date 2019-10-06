@@ -10,6 +10,10 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "SoundTouch.h"
+
+using namespace soundtouch;
+SoundTouch *pitchShifter;
 
 //==============================================================================
 WhammyPlugAudioProcessor::WhammyPlugAudioProcessor()
@@ -24,6 +28,7 @@ WhammyPlugAudioProcessor::WhammyPlugAudioProcessor()
                        )
 #endif
 {
+    
 }
 
 WhammyPlugAudioProcessor::~WhammyPlugAudioProcessor()
@@ -97,6 +102,17 @@ void WhammyPlugAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+    pitchShifter = new SoundTouch();
+    pitchShifter->setSampleRate((uint)sampleRate);
+    pitchShifter->setChannels(2); // assunto stereo, in caso modificare
+    
+    pitchShifter->setTempoChange(0);
+    pitchShifter->setPitchSemiTones(0);
+    pitchShifter->setRateChange(0);
+
+    // hi latency? -> combo (QUICK = true, AA = false)
+    pitchShifter->setSetting(SETTING_USE_QUICKSEEK, false);
+    pitchShifter->setSetting(SETTING_USE_AA_FILTER, true);
 }
 
 void WhammyPlugAudioProcessor::releaseResources()
@@ -156,11 +172,17 @@ void WhammyPlugAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
 //
 //        // ..do something to the data...
 //    }
+
+    // ALTER pitchShifter->setPitchSemiTones(int newPitch);
+
     float *inter_stereo = new float[2*buffer.getNumSamples()];
     // tra tutti i buffer disponibili crea interlacciamento stereo coi 2 canali default
     AudioDataConverters::interleaveSamples(
        buffer.getArrayOfReadPointers(), inter_stereo, buffer.getNumSamples(), 2);
-    // pitchShifter here
+    pitchShifter->putSamples(inter_stereo, buffer.getNumSamples());
+    // below need to loop?!
+    pitchShifter->receiveSamples(inter_stereo, buffer.getNumSamples());
+    pitchShifter->flush(); // devo veramente pulire?!
     // de-interlacciare e scrivere in output
     AudioDataConverters::deinterleaveSamples(inter_stereo, buffer.getArrayOfWritePointers(), buffer.getNumSamples(), 2);
 }

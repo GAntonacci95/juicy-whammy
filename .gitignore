@@ -1,18 +1,20 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/InstrumentalBoard/Builds/MacOSX/build
-# /InstrumentalBoard/Builds/VisualStudio2019/?
-/WhammyPlug/Builds/MacOSX/build
-# /WhammyPlug/Builds/VisualStudio2019/?
-/DFXerPlug/Builds/MacOSX/build
-# /DFXerPlug/Builds/VisualStudio2019/?
+InstrumentalBoard/Builds/MacOSX/build
+# InstrumentalBoard/Builds/VisualStudio2019/?
+WhammyPlug/Builds/MacOSX/build
+# WhammyPlug/Builds/VisualStudio2019/?
+DFXerPlug/Builds/MacOSX/build
+# DFXerPlug/Builds/VisualStudio2019/?
+
+# XCode preference
+InstrumentalBoard/Builds/MacOSX/DerivedData
+WhammyPlug/Builds/MacOSX/DerivedData
+DFXerPlug/Builds/MacOSX/DerivedData
 
 # temp ignored libs
-/Libs/Sources/smbPitchShiftProject-renew
-/Libs/Sources/soundtouch*
-/Libs/Sources/SuperpoweredSDK/Examples_*
-/Libs/Sources/SuperpoweredSDK/*e*
+Libs/Sources/SoundTouch/DerivedData
 
 # dependencies
 

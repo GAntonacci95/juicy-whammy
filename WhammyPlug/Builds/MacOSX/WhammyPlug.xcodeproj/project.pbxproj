@@ -59,6 +59,9 @@
 		4281AA9823491A3B0034355F /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEFD96BDF3ECEF7CC4859BB0 /* OpenGL.framework */; };
 		4281AA9923491A3B0034355F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C06D4975B3E51FDF8C70877 /* QuartzCore.framework */; };
 		4281AA9A23491A3B0034355F /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2986874F3931203E26671509 /* WebKit.framework */; };
+		4292AD06234A2A8100362AB1 /* SoundTouch.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4292AD05234A2A7B00362AB1 /* SoundTouch.dylib */; };
+		4292AD07234A2A8200362AB1 /* SoundTouch.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4292AD05234A2A7B00362AB1 /* SoundTouch.dylib */; };
+		4292AD08234A2A8200362AB1 /* SoundTouch.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4292AD05234A2A7B00362AB1 /* SoundTouch.dylib */; };
 		43B42A57071818ECE3842FFC /* include_juce_audio_plugin_client_VST_utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = B464934759A31D76EE626B0C /* include_juce_audio_plugin_client_VST_utils.mm */; };
 		480D44554A776314FB077D19 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2986874F3931203E26671509 /* WebKit.framework */; };
 		4896FEB357961E5B7052B40D /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4A162A6FAC16B4995108FC9 /* Carbon.framework */; };
@@ -133,6 +136,7 @@
 		3880B94CA0FA37AFBFCCE4E1 /* include_juce_cryptography.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_cryptography.mm; path = ../../JuceLibraryCode/include_juce_cryptography.mm; sourceTree = SOURCE_ROOT; };
 		3D4FFA0C2DBCC901730890C7 /* AppConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppConfig.h; path = ../../JuceLibraryCode/AppConfig.h; sourceTree = SOURCE_ROOT; };
 		3FB07CDD4CF0463055BE1488 /* juce_audio_plugin_client */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_plugin_client; path = /Users/gabrieleantonacci/Documents/JUCE/modules/juce_audio_plugin_client; sourceTree = "<absolute>"; };
+		4292AD05234A2A7B00362AB1 /* SoundTouch.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = SoundTouch.dylib; path = ../../../Libs/Builds/MacOSX/SoundTouch/SoundTouch.dylib; sourceTree = "<group>"; };
 		42DB65B4369FEBF779D5D5A8 /* Info-Standalone_Plugin.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-Standalone_Plugin.plist"; sourceTree = SOURCE_ROOT; };
 		43453E5FE4F80F4554A15E7D /* DiscRecording.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiscRecording.framework; path = System/Library/Frameworks/DiscRecording.framework; sourceTree = SDKROOT; };
 		46D5C9E57A59C0FFBF00B70E /* juce_data_structures */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_data_structures; path = /Users/gabrieleantonacci/Documents/JUCE/modules/juce_data_structures; sourceTree = "<absolute>"; };
@@ -199,6 +203,7 @@
 				D56FD8779C2CDACD2B1ACFB5 /* DiscRecording.framework in Frameworks */,
 				BA2F245AFA38FFFF91D78184 /* IOKit.framework in Frameworks */,
 				87156E4318FC9A5B9978FC69 /* OpenGL.framework in Frameworks */,
+				4292AD06234A2A8100362AB1 /* SoundTouch.dylib in Frameworks */,
 				AEA1A2CE886CCD873BB9052E /* QuartzCore.framework in Frameworks */,
 				480D44554A776314FB077D19 /* WebKit.framework in Frameworks */,
 			);
@@ -218,6 +223,7 @@
 				4281AA9623491A3B0034355F /* DiscRecording.framework in Frameworks */,
 				4281AA9723491A3B0034355F /* IOKit.framework in Frameworks */,
 				4281AA9823491A3B0034355F /* OpenGL.framework in Frameworks */,
+				4292AD08234A2A8200362AB1 /* SoundTouch.dylib in Frameworks */,
 				4281AA9923491A3B0034355F /* QuartzCore.framework in Frameworks */,
 				4281AA9A23491A3B0034355F /* WebKit.framework in Frameworks */,
 			);
@@ -239,6 +245,7 @@
 				4281AA8A23491A3B0034355F /* IOKit.framework in Frameworks */,
 				4281AA8B23491A3B0034355F /* OpenGL.framework in Frameworks */,
 				4281AA8C23491A3B0034355F /* QuartzCore.framework in Frameworks */,
+				4292AD07234A2A8200362AB1 /* SoundTouch.dylib in Frameworks */,
 				4281AA8D23491A3B0034355F /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -335,6 +342,7 @@
 		7E9CD53C8507BD803890FF63 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4292AD05234A2A7B00362AB1 /* SoundTouch.dylib */,
 				029EE2BDD16D64671EAF5579 /* Accelerate.framework */,
 				854B0102D92DF5D3BE5159E0 /* AudioToolbox.framework */,
 				51B69BE719533C20B31F197D /* AudioUnit.framework */,
@@ -733,6 +741,7 @@
 					/Users/gabrieleantonacci/Documents/JUCE/modules,
 					/Users/gabrieleantonacci/Documents/JUCE/modules/juce_audio_plugin_client,
 					"$(inherited)",
+					../../../Libs/Builds/MacOSX/SoundTouch/Include,
 				);
 				INFOPLIST_FILE = "Info-Standalone_Plugin.plist";
 				INFOPLIST_PREPROCESS = NO;
@@ -822,6 +831,7 @@
 					/Users/gabrieleantonacci/Documents/JUCE/modules,
 					/Users/gabrieleantonacci/Documents/JUCE/modules/juce_audio_plugin_client,
 					"$(inherited)",
+					../../../Libs/Builds/MacOSX/SoundTouch/Include,
 				);
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
@@ -868,6 +878,7 @@
 					/Users/gabrieleantonacci/Documents/JUCE/modules,
 					/Users/gabrieleantonacci/Documents/JUCE/modules/juce_audio_plugin_client,
 					"$(inherited)",
+					../../../Libs/Builds/MacOSX/SoundTouch/Include,
 				);
 				INFOPLIST_FILE = "Info-AU.plist";
 				INFOPLIST_PREPROCESS = NO;
@@ -920,6 +931,7 @@
 					/Users/gabrieleantonacci/Documents/JUCE/modules,
 					/Users/gabrieleantonacci/Documents/JUCE/modules/juce_audio_plugin_client,
 					"$(inherited)",
+					../../../Libs/Builds/MacOSX/SoundTouch/Include,
 				);
 				INFOPLIST_FILE = "Info-Standalone_Plugin.plist";
 				INFOPLIST_PREPROCESS = NO;
@@ -1015,6 +1027,7 @@
 					/Users/gabrieleantonacci/Documents/JUCE/modules,
 					/Users/gabrieleantonacci/Documents/JUCE/modules/juce_audio_plugin_client,
 					"$(inherited)",
+					../../../Libs/Builds/MacOSX/SoundTouch/Include,
 				);
 				INFOPLIST_FILE = "Info-VST3.plist";
 				INFOPLIST_PREPROCESS = NO;
@@ -1069,6 +1082,7 @@
 					/Users/gabrieleantonacci/Documents/JUCE/modules,
 					/Users/gabrieleantonacci/Documents/JUCE/modules/juce_audio_plugin_client,
 					"$(inherited)",
+					../../../Libs/Builds/MacOSX/SoundTouch/Include,
 				);
 				INFOPLIST_FILE = "Info-VST3.plist";
 				INFOPLIST_PREPROCESS = NO;
@@ -1130,6 +1144,7 @@
 					/Users/gabrieleantonacci/Documents/JUCE/modules,
 					/Users/gabrieleantonacci/Documents/JUCE/modules/juce_audio_plugin_client,
 					"$(inherited)",
+					../../../Libs/Builds/MacOSX/SoundTouch/Include,
 				);
 				INFOPLIST_FILE = "Info-AU.plist";
 				INFOPLIST_PREPROCESS = NO;
@@ -1191,6 +1206,7 @@
 					/Users/gabrieleantonacci/Documents/JUCE/modules,
 					/Users/gabrieleantonacci/Documents/JUCE/modules/juce_audio_plugin_client,
 					"$(inherited)",
+					../../../Libs/Builds/MacOSX/SoundTouch/Include,
 				);
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				LLVM_LTO = YES;
