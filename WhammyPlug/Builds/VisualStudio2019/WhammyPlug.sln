@@ -1,38 +1,60 @@
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2019
-
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WhammyPlug - Standalone Plugin", "WhammyPlug_StandalonePlugin.vcxproj", "{B259443B-BADE-C650-B901-9631FD2D7266}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29306.81
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WhammyPlug_StandalonePlugin", "WhammyPlug_StandalonePlugin.vcxproj", "{B259443B-BADE-C650-B901-9631FD2D7266}"
 	ProjectSection(ProjectDependencies) = postProject
 		{0B773E10-74A6-57B3-C04A-D09477B7EB83} = {0B773E10-74A6-57B3-C04A-D09477B7EB83}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WhammyPlug - VST3", "WhammyPlug_VST3.vcxproj", "{8F47C927-2ECA-82FC-6F79-B31C08C12E6D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WhammyPlug_VST3", "WhammyPlug_VST3.vcxproj", "{8F47C927-2ECA-82FC-6F79-B31C08C12E6D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{0B773E10-74A6-57B3-C04A-D09477B7EB83} = {0B773E10-74A6-57B3-C04A-D09477B7EB83}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WhammyPlug - Shared Code", "WhammyPlug_SharedCode.vcxproj", "{0B773E10-74A6-57B3-C04A-D09477B7EB83}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WhammyPlug_SharedCode", "WhammyPlug_SharedCode.vcxproj", "{0B773E10-74A6-57B3-C04A-D09477B7EB83}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SoundTouch", "..\..\..\Libs\Sources\SoundTouch\SoundTouch.vs\SoundTouch.vcxproj", "{DCDF0C49-BC32-42DE-AC9D-8283D834DC85}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8F47C927-2ECA-82FC-6F79-B31C08C12E6D}.Debug|x64.ActiveCfg = Debug|x64
-		{8F47C927-2ECA-82FC-6F79-B31C08C12E6D}.Debug|x64.Build.0 = Debug|x64
-		{8F47C927-2ECA-82FC-6F79-B31C08C12E6D}.Release|x64.ActiveCfg = Release|x64
-		{8F47C927-2ECA-82FC-6F79-B31C08C12E6D}.Release|x64.Build.0 = Release|x64
 		{B259443B-BADE-C650-B901-9631FD2D7266}.Debug|x64.ActiveCfg = Debug|x64
 		{B259443B-BADE-C650-B901-9631FD2D7266}.Debug|x64.Build.0 = Debug|x64
+		{B259443B-BADE-C650-B901-9631FD2D7266}.Debug|x86.ActiveCfg = Debug|x64
 		{B259443B-BADE-C650-B901-9631FD2D7266}.Release|x64.ActiveCfg = Release|x64
 		{B259443B-BADE-C650-B901-9631FD2D7266}.Release|x64.Build.0 = Release|x64
+		{B259443B-BADE-C650-B901-9631FD2D7266}.Release|x86.ActiveCfg = Release|x64
+		{8F47C927-2ECA-82FC-6F79-B31C08C12E6D}.Debug|x64.ActiveCfg = Debug|x64
+		{8F47C927-2ECA-82FC-6F79-B31C08C12E6D}.Debug|x64.Build.0 = Debug|x64
+		{8F47C927-2ECA-82FC-6F79-B31C08C12E6D}.Debug|x86.ActiveCfg = Debug|x64
+		{8F47C927-2ECA-82FC-6F79-B31C08C12E6D}.Release|x64.ActiveCfg = Release|x64
+		{8F47C927-2ECA-82FC-6F79-B31C08C12E6D}.Release|x64.Build.0 = Release|x64
+		{8F47C927-2ECA-82FC-6F79-B31C08C12E6D}.Release|x86.ActiveCfg = Release|x64
 		{0B773E10-74A6-57B3-C04A-D09477B7EB83}.Debug|x64.ActiveCfg = Debug|x64
 		{0B773E10-74A6-57B3-C04A-D09477B7EB83}.Debug|x64.Build.0 = Debug|x64
+		{0B773E10-74A6-57B3-C04A-D09477B7EB83}.Debug|x86.ActiveCfg = Debug|x64
 		{0B773E10-74A6-57B3-C04A-D09477B7EB83}.Release|x64.ActiveCfg = Release|x64
 		{0B773E10-74A6-57B3-C04A-D09477B7EB83}.Release|x64.Build.0 = Release|x64
+		{0B773E10-74A6-57B3-C04A-D09477B7EB83}.Release|x86.ActiveCfg = Release|x64
+		{DCDF0C49-BC32-42DE-AC9D-8283D834DC85}.Debug|x64.ActiveCfg = Debug|x64
+		{DCDF0C49-BC32-42DE-AC9D-8283D834DC85}.Debug|x64.Build.0 = Debug|x64
+		{DCDF0C49-BC32-42DE-AC9D-8283D834DC85}.Debug|x86.ActiveCfg = Debug|Win32
+		{DCDF0C49-BC32-42DE-AC9D-8283D834DC85}.Debug|x86.Build.0 = Debug|Win32
+		{DCDF0C49-BC32-42DE-AC9D-8283D834DC85}.Release|x64.ActiveCfg = Release|x64
+		{DCDF0C49-BC32-42DE-AC9D-8283D834DC85}.Release|x64.Build.0 = Release|x64
+		{DCDF0C49-BC32-42DE-AC9D-8283D834DC85}.Release|x86.ActiveCfg = Release|Win32
+		{DCDF0C49-BC32-42DE-AC9D-8283D834DC85}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8C77B453-75AA-478C-BF9C-90AEC8A334AB}
 	EndGlobalSection
 EndGlobal
