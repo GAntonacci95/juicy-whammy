@@ -98,25 +98,38 @@ void WhammyPlugAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
-    interlaced_size = -1;
-    interlaced = nullptr;
-    processed = nullptr;
     
-    pitchShifter = new SoundTouch();
-    pitchShifter->setSampleRate((uint)sampleRate);
+    shifterL = new SoundTouch();
+    shifterR = new SoundTouch();
+    shifterL->setSampleRate((uint)sampleRate);
+    shifterR->setSampleRate((uint)sampleRate);
 
     // HI latency? -> combo (QUICK = true, AA = false)
-    pitchShifter->setSetting(SETTING_USE_QUICKSEEK, false);
-    pitchShifter->setSetting(SETTING_USE_AA_FILTER, true);
+    shifterL->setSetting(SETTING_USE_QUICKSEEK, false);
+    shifterL->setSetting(SETTING_USE_AA_FILTER, true);
+    shifterR->setSetting(SETTING_USE_QUICKSEEK, false);
+    shifterR->setSetting(SETTING_USE_AA_FILTER, true);
+    
+    shifterL->setChannels(1);
+    shifterR->setChannels(1);
+
+    // ALTER HERE, setup via SLIDER
+    shifterL->setPitchSemiTones(+5);
+    shifterR->setPitchSemiTones(+5);
 }
 
 void WhammyPlugAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
-    pitchShifter->clear();
-    pitchShifter->flush();
-    delete pitchShifter;
+    
+    shifterL->clear();
+    shifterL->flush();
+    delete shifterL;
+    
+    shifterR->clear();
+    shifterR->flush();
+    delete shifterR;
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -158,45 +171,12 @@ void WhammyPlugAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-//    // EXPERIMENT 1: SIMPLE TRANSCRIPTION
-//    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-//    {
-//        buffer.copyFrom(channel, 0, buffer.getReadPointer(channel), buffer.getNumSamples());
-//    }
-    if (interlaced == nullptr) // allora devo inizializzare
-    {
-        interlaced_size = totalNumInputChannels * buffer.getNumSamples();
-        interlaced = new float[interlaced_size];
-        processed = new float[interlaced_size];
-
-        pitchShifter->setChannels(totalNumInputChannels);
-
-        pitchShifter->setTempoChange(0);
-        pitchShifter->setRateChange(0);
-        // ALTER HERE, setup via SLIDER
-        pitchShifter->setPitchSemiTones(+5);
-    }
-    // svuoto la memoria per il processing
-    std::fill(interlaced, interlaced + (interlaced_size * (sizeof(float) / 4)), 0);
-    std::fill(processed, processed + (interlaced_size * (sizeof(float) / 4)), 0);
-    
-    // dai buffer disponibili creo interlacciamento e lo scrivo in memoria interlaced
-    AudioDataConverters::interleaveSamples(
-       buffer.getArrayOfReadPointers(), interlaced, buffer.getNumSamples(), totalNumInputChannels);
-
-//   // EXPERIMENT 2: ANOTHER TRANSCRIPTION (\w interlacing and deinterlacing)
-//   //                     + interlaced_size * #words_per_array
-//    std::copy(interlaced, interlaced + (interlaced_size * (sizeof(float) / 4)), processed);
-    
-    // EXPERIMENT 3: LIBRARY USAGE
     // processo memoria interlaced in memoria processed
-    pitchShifter->putSamples(interlaced, interlaced_size);
-    while (pitchShifter->receiveSamples(processed, interlaced_size) > 0)
-    {
-        // deinterlaccia processed e scrive in buffer output
-        AudioDataConverters::deinterleaveSamples(
-            processed, buffer.getArrayOfWritePointers(), buffer.getNumSamples(), totalNumInputChannels);
-    }
+    shifterL->putSamples(buffer.getReadPointer(0), buffer.getNumSamples());
+    shifterR->putSamples(buffer.getReadPointer(1), buffer.getNumSamples());
+    
+    shifterL->receiveSamples(buffer.getWritePointer(0), buffer.getNumSamples());
+    shifterR->receiveSamples(buffer.getWritePointer(1), buffer.getNumSamples());
 }
 
 //==============================================================================
