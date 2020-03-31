@@ -10,10 +10,6 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-#include "SoundTouch.h"
-
-using namespace soundtouch;
-SoundTouch *pitchShifter;
 
 //==============================================================================
 WhammyPlugAudioProcessor::WhammyPlugAudioProcessor()
@@ -102,15 +98,14 @@ void WhammyPlugAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+    interlaced_size = -1;
+    interlaced = nullptr;
+    processed = nullptr;
+    
     pitchShifter = new SoundTouch();
     pitchShifter->setSampleRate((uint)sampleRate);
-    pitchShifter->setChannels(2); // assunto stereo, in caso modificare
-    
-    pitchShifter->setTempoChange(0);
-    pitchShifter->setPitchSemiTones(0);
-    pitchShifter->setRateChange(0);
 
-    // hi latency? -> combo (QUICK = true, AA = false)
+    // HI latency? -> combo (QUICK = true, AA = false)
     pitchShifter->setSetting(SETTING_USE_QUICKSEEK, false);
     pitchShifter->setSetting(SETTING_USE_AA_FILTER, true);
 }
@@ -119,6 +114,9 @@ void WhammyPlugAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
+    pitchShifter->clear();
+    pitchShifter->flush();
+    delete pitchShifter;
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -147,7 +145,7 @@ bool WhammyPlugAudioProcessor::isBusesLayoutSupported (const BusesLayout& layout
 
 void WhammyPlugAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
-    ScopedNoDenormals noDenormals;
+//     ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
@@ -160,31 +158,45 @@ void WhammyPlugAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    // Make sure to reset the state if your inner loop is processing
-    // the samples and the outer loop is handling the channels.
-    // Alternatively, you can process the samples with the channels
-    // interleaved by keeping the same state.
+//    // EXPERIMENT 1: SIMPLE TRANSCRIPTION
 //    for (int channel = 0; channel < totalNumInputChannels; ++channel)
 //    {
-//        auto* channelData = buffer.getWritePointer (channel);
-//
-//        // ..do something to the data...
+//        buffer.copyFrom(channel, 0, buffer.getReadPointer(channel), buffer.getNumSamples());
 //    }
+    if (interlaced == nullptr) // allora devo inizializzare
+    {
+        interlaced_size = totalNumInputChannels * buffer.getNumSamples();
+        interlaced = new float[interlaced_size];
+        processed = new float[interlaced_size];
 
-    // ALTER pitchShifter->setPitchSemiTones(int newPitch);
+        pitchShifter->setChannels(totalNumInputChannels);
 
-    float *inter_stereo = new float[2*buffer.getNumSamples()];
-    // tra tutti i buffer disponibili crea interlacciamento stereo coi 2 canali default
+        pitchShifter->setTempoChange(0);
+        pitchShifter->setRateChange(0);
+        // ALTER HERE, setup via SLIDER
+        pitchShifter->setPitchSemiTones(+5);
+    }
+    // svuoto la memoria per il processing
+    std::fill(interlaced, interlaced + (interlaced_size * (sizeof(float) / 4)), 0);
+    std::fill(processed, processed + (interlaced_size * (sizeof(float) / 4)), 0);
+    
+    // dai buffer disponibili creo interlacciamento e lo scrivo in memoria interlaced
     AudioDataConverters::interleaveSamples(
-       buffer.getArrayOfReadPointers(), inter_stereo, buffer.getNumSamples(), 2);
-    pitchShifter->putSamples(inter_stereo, buffer.getNumSamples());
-    // below need to loop?!
-    pitchShifter->receiveSamples(inter_stereo, buffer.getNumSamples());
-    pitchShifter->flush(); // devo veramente pulire?!
-    // de-interlacciare e scrivere in output
-    AudioDataConverters::deinterleaveSamples(inter_stereo, buffer.getArrayOfWritePointers(), buffer.getNumSamples(), 2);
+       buffer.getArrayOfReadPointers(), interlaced, buffer.getNumSamples(), totalNumInputChannels);
+
+//   // EXPERIMENT 2: ANOTHER TRANSCRIPTION (\w interlacing and deinterlacing)
+//   //                     + interlaced_size * #words_per_array
+//    std::copy(interlaced, interlaced + (interlaced_size * (sizeof(float) / 4)), processed);
+    
+    // EXPERIMENT 3: LIBRARY USAGE
+    // processo memoria interlaced in memoria processed
+    pitchShifter->putSamples(interlaced, interlaced_size);
+    while (pitchShifter->receiveSamples(processed, interlaced_size) > 0)
+    {
+        // deinterlaccia processed e scrive in buffer output
+        AudioDataConverters::deinterleaveSamples(
+            processed, buffer.getArrayOfWritePointers(), buffer.getNumSamples(), totalNumInputChannels);
+    }
 }
 
 //==============================================================================

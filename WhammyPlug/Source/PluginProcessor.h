@@ -11,6 +11,9 @@
 #pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "SoundTouch.h"
+
+using namespace soundtouch;
 
 //==============================================================================
 /**
@@ -56,6 +59,17 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
+    // dimensione = #canali_in * samplesPerBlock (dimensione_blocco_standard)
+    int interlaced_size;
+    // numero campioni processati sull'intero blocco
+    int tmp_processed_len;
+    // vettori che servono per il processing
+    float* interlaced;
+    float* processed;
+    
+    // dimensione perchè la libreria vuole uno stream interlacciato, cioè:
+    // usa un solo vettore di dimensione superiore che alterna i campioni di ogni ch
+    SoundTouch* pitchShifter;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WhammyPlugAudioProcessor)
 };

@@ -23,6 +23,10 @@ Libs/Sources/.smbPitchShiftProject-renew
 Libs/Sources/SoundTouch/SoundTouch.vs/Debug
 Libs/Sources/SoundTouch/SoundTouch.vs/x64/Debug
 
+# ...
+Project.logicx
+Dyno Simulation_bip.aif
+
 # dependencies
 
 

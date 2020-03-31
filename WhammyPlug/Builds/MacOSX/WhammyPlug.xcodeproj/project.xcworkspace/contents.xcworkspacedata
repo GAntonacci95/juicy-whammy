@@ -2,12 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:../../../../Libs/SuperpoweredSDK/Superpowered">
-   </FileRef>
-   <FileRef
-      location = "group:../../../../Libs/SuperpoweredSDK/Superpowered">
-   </FileRef>
-   <FileRef
       location = "self:">
    </FileRef>
 </Workspace>
