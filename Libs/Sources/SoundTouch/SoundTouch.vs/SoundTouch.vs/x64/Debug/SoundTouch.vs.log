@@ -1,0 +1,19 @@
+﻿  AAFilter.cpp
+  BPMDetect.cpp
+C:\Users\Cinci\Desktop\CMLS PROJECT\juicy-whammy\Libs\Sources\SoundTouch\SoundTouch\BPMDetect.cpp(564,27): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  cpu_detect_x86.cpp
+  FIFOSampleBuffer.cpp
+  FIRFilter.cpp
+  InterpolateCubic.cpp
+  InterpolateLinear.cpp
+  InterpolateShannon.cpp
+  mmx_optimized.cpp
+  PeakFinder.cpp
+  RateTransposer.cpp
+  RunParameters.cpp
+  SoundTouch.cpp
+  sse_optimized.cpp
+  TDStretch.cpp
+  WavFile.cpp
+  Generating Code...
+  SoundTouch.vs.vcxproj -> C:\Users\Cinci\Desktop\CMLS PROJECT\juicy-whammy\WhammyPlug\Builds\VisualStudio2019\x64\Debug\SoundTouch.vs.lib

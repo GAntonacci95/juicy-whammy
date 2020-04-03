@@ -14,7 +14,7 @@
 //==============================================================================
 WhammyPlugAudioProcessor::WhammyPlugAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
-     : AudioProcessor (BusesProperties()
+    : AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
                       #if ! JucePlugin_IsSynth
                        .withInput  ("Input",  AudioChannelSet::stereo(), true)
@@ -114,8 +114,12 @@ void WhammyPlugAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     shifterR->setChannels(1);
 
     // ALTER HERE, setup via SLIDER
-    shifterL->setPitchSemiTones(+5);
-    shifterR->setPitchSemiTones(+5);
+    /*
+    shifterL->setPitchSemiTones(pitch_value);
+    shifterR->setPitchSemiTones(pitch_value);
+    */
+    shifterL->setPitchSemiTones(5);
+    shifterR->setPitchSemiTones(5);
 }
 
 void WhammyPlugAudioProcessor::releaseResources()

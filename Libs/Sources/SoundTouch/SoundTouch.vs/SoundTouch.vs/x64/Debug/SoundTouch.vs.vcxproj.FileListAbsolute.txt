@@ -1,0 +1,2 @@
+C:\Users\Cinci\Desktop\CMLS PROJECT\juicy-whammy\WhammyPlug\Builds\VisualStudio2019\x64\Debug\SoundTouch.vs.pdb
+C:\Users\Cinci\Desktop\CMLS PROJECT\juicy-whammy\Libs\Sources\SoundTouch\SoundTouch.vs\SoundTouch.vs\x64\Debug\SoundTouch.vs.pdb

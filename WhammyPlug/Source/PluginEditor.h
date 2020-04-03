@@ -16,20 +16,27 @@
 //==============================================================================
 /**
 */
-class WhammyPlugAudioProcessorEditor  : public AudioProcessorEditor
+class WhammyPlugAudioProcessorEditor  : public AudioProcessorEditor/*,
+                                        private Slider::Listener,
+                                        private LookAndFeel_V4*/
 {
 public:
     WhammyPlugAudioProcessorEditor (WhammyPlugAudioProcessor&);
     ~WhammyPlugAudioProcessorEditor();
 
     //==============================================================================
-    void paint (Graphics&) override;
+    void paint(Graphics&) override;
     void resized() override;
 
 private:
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
+    /*
+    void sliderValueChanged(Slider* slider) override;
+    void drawRotarySlider(Graphics& g, int x, int y, int width, int height, float sliderPos,const float rotaryStartAngle, const float rotaryEndAngle, Slider& slider) override;
+    */
     WhammyPlugAudioProcessor& processor;
+
+    Slider* pedal_level;
+    Slider* pitch_choice;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WhammyPlugAudioProcessorEditor)
 };
