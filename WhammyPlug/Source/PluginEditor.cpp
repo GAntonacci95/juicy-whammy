@@ -16,14 +16,15 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
     : AudioProcessorEditor (&p), processor (p)
 {
     setSize (600, 600);
-
     LookAndFeel::setDefaultLookAndFeel(&customLookAndFeel);
 
     // displaying pedal, knob and boxes
     pedal.setColour(TextButton::buttonColourId, Colours::black);
+    pedal.setColour(TextButton::buttonOnColourId, Colours::black);
     addAndMakeVisible(pedal);
 
     slider_container.setColour(TextButton::buttonColourId, Colours::darkred);
+    slider_container.setColour(TextButton::buttonOnColourId, Colours::darkred);
     addAndMakeVisible(slider_container);
 
     knob.setColour(TextButton::buttonColourId, Colours::black);
@@ -50,16 +51,17 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
     pitch_choice.setTextBoxStyle(Slider::NoTextBox, false, 90, 0);
     pitch_choice.setValue(0.0);
     pitch_choice.addListener(this);
-//    pitch_choice.setLookAndFeel(&customLookAndFeel);
     // to change the maximum range of pitch shifting according to the chosen number of semitones
     pitch_choice.onValueChange = [this] {
         if (pitch_choice.getValue() > 0) {
             pedal_level.setRange(0, pitch_choice.getValue(), dontSendNotification);
             pedal_level.setValue(0.0);
+            customLookAndFeel.high = -1;
         }
         else if (pitch_choice.getValue() < 0) {
             pedal_level.setRange(pitch_choice.getValue(), 0, dontSendNotification);
             pedal_level.setValue(0.0);
+            customLookAndFeel.high = 1;
         }
     };
 
@@ -636,11 +638,6 @@ void WhammyPlugAudioProcessorEditor::paint (Graphics& g)
         nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
     }
-    /*
-    g.setColour (Colours::black);
-    g.setFont (15.0f);
-    g.drawFittedText ("Hello World!", getLocalBounds(), Justification::horizontallyCentred, 1);
-    */
 }
 
 void WhammyPlugAudioProcessorEditor::resized()
@@ -664,7 +661,7 @@ void WhammyPlugAudioProcessorEditor::resized()
     auto slider_container_margin = slider_container_area.getWidth() / 5;
 
     slider_container.setBounds(slider_container_area.reduced(slider_container_margin));
-    pedal_level.setBounds(slider_container_area.removeFromTop(slider_container_area.getHeight()).reduced(slider_container_margin));
+    pedal_level.setBounds(slider_container_area.removeFromTop(slider_container_area.getHeight()*29/30).reduced(slider_container_margin)); // -20
 
     // knob is inside the knob container area
     auto knob_container_area = knob_area.removeFromLeft(knob_area.getWidth());
@@ -708,38 +705,4 @@ void WhammyPlugAudioProcessorEditor::sliderValueChanged(Slider* s)
     else if (s == &pitch_choice) {
         processor.knob_value = s->getValue();
     }
-}
-
-void WhammyPlugAudioProcessorEditor::drawRotarySlider(Graphics& g, int x, int y, int width, int height, float sliderPos,
-    const float rotaryStartAngle, const float rotaryEndAngle, Slider& slider)
-{
-    auto radius = 30.0f;
-    auto centreX = x + width * 0.5f;
-    auto centreY = y + height * 0.5f;
-    auto rx = centreX - radius;
-    auto ry = centreY - radius;
-    auto rw = radius * 2.0f;
-    auto angle = rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle);
-
-    // fill in the colour of the knob
-    Colour color = Colour(185, 0, 0);
-    g.setColour(color.withAlpha(0.2f));
-    g.fillEllipse(rx, ry, rw, rw);
-
-    // outline
-    g.setColour(Colours::black);
-    g.drawEllipse(rx, ry, rw, rw, 1.0f);
-
-    // Pointer
-    Path p;
-    auto pointerLength = radius;
-    auto pointerThickness = 2.0f;
-    Rectangle<float> r(-pointerThickness * 0.5f, -radius - 2.0f, pointerThickness, pointerLength);
-    p.addRectangle(r);
-    p.applyTransform(AffineTransform::rotation(angle).translated(centreX, centreY));
-    Rectangle<float> rect(rx, ry, rw, rw);
-    p.addPieSegment(rect, rotaryStartAngle, angle, 0.95f);
-
-    g.setColour(Colours::darkred.withAlpha(1.0f));
-    g.fillPath(p);
 }

@@ -12,31 +12,30 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
+#include "PluginLookAndFeel.h"
 
 //==============================================================================
 /**
 */
 class WhammyPlugAudioProcessorEditor  : public AudioProcessorEditor,
-                                        public Slider::Listener,
-                                        public LookAndFeel_V4
+                                        public Slider::Listener
 {
 public:
     WhammyPlugAudioProcessorEditor (WhammyPlugAudioProcessor&);
     ~WhammyPlugAudioProcessorEditor();
     
     //==============================================================================
-    LookAndFeel_V4 customLookAndFeel;
     //==============================================================================
 
     void paint(Graphics&) override;
     void resized() override;
 
     void sliderValueChanged(Slider* slider) override;
-    void drawRotarySlider(Graphics& g, int x, int y, int width, int height, float sliderPos, const float rotaryStartAngle, 
-        const float rotaryEndAngle, Slider& slider) override;
 
 private:
     WhammyPlugAudioProcessor& processor;
+
+    PluginLookAndFeel customLookAndFeel;
 
     // Sliders to control the number of semitones
     Slider pedal_level;

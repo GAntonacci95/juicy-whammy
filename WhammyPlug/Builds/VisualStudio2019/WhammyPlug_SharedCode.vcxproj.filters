@@ -2292,6 +2292,9 @@
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_opengl.cpp">
       <Filter>JUCE Library Code</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\PluginLookAndFeel.cpp">
+      <Filter>WhammyPlug\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\PluginProcessor.h">
@@ -4495,6 +4498,9 @@
     </ClInclude>
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h">
       <Filter>JUCE Library Code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\PluginLookAndFeel.h">
+      <Filter>WhammyPlug\Source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
