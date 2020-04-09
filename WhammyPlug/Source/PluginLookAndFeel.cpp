@@ -1,6 +1,4 @@
-
 #include "PluginLookAndFeel.h"
-#include "PluginEditor.h"
 
 PluginLookAndFeel::PluginLookAndFeel()
 {
@@ -9,7 +7,6 @@ PluginLookAndFeel::PluginLookAndFeel()
 PluginLookAndFeel::~PluginLookAndFeel()
 {
 }
-
 
 void PluginLookAndFeel::drawLinearSlider(Graphics& g, int x, int y, int width, int height, float sliderPos, float minSliderPos,
     float maxSliderPos, const Slider::SliderStyle style, Slider& slider)
@@ -62,4 +59,3 @@ void PluginLookAndFeel::drawRotarySlider(Graphics& g, int x, int y, int width, i
     g.setColour(Colours::black.withAlpha(1.0f));
     g.fillPath(p);
 }
-

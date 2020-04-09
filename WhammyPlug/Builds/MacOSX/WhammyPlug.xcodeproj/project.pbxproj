@@ -33,6 +33,7 @@
 		31D2CA7728BA1124E5C909BF /* include_juce_opengl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 73666D35A0AE754D4F3F3B24 /* include_juce_opengl.mm */; };
 		3325271BB1DD7EDE0E0EAA70 /* include_juce_audio_plugin_client_AU_2.mm in Sources */ = {isa = PBXBuildFile; fileRef = D0E45DF46FE5944BBB673011 /* include_juce_audio_plugin_client_AU_2.mm */; };
 		41DB53FBCD4FF0A4D3AAD684 /* include_juce_audio_plugin_client_AU.r in Rez */ = {isa = PBXBuildFile; fileRef = 9DB934B87F8E0015B8C8B672 /* include_juce_audio_plugin_client_AU.r */; };
+		42688506243F534B00E75783 /* PluginLookAndFeel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42688505243F487B00E75783 /* PluginLookAndFeel.cpp */; };
 		4281AA8123491A3B0034355F /* RecentFilesMenuTemplate.nib in Resources */ = {isa = PBXBuildFile; fileRef = 165D594FF458A41ABA659FA3 /* RecentFilesMenuTemplate.nib */; };
 		4281AA8223491A3B0034355F /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 029EE2BDD16D64671EAF5579 /* Accelerate.framework */; };
 		4281AA8323491A3B0034355F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 854B0102D92DF5D3BE5159E0 /* AudioToolbox.framework */; };
@@ -136,6 +137,8 @@
 		3880B94CA0FA37AFBFCCE4E1 /* include_juce_cryptography.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_cryptography.mm; path = ../../JuceLibraryCode/include_juce_cryptography.mm; sourceTree = SOURCE_ROOT; };
 		3D4FFA0C2DBCC901730890C7 /* AppConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppConfig.h; path = ../../JuceLibraryCode/AppConfig.h; sourceTree = SOURCE_ROOT; };
 		3FB07CDD4CF0463055BE1488 /* juce_audio_plugin_client */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_plugin_client; path = /Users/gabrieleantonacci/Documents/JUCE/modules/juce_audio_plugin_client; sourceTree = "<absolute>"; };
+		42688504243F487A00E75783 /* PluginLookAndFeel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PluginLookAndFeel.h; path = ../../Source/PluginLookAndFeel.h; sourceTree = SOURCE_ROOT; };
+		42688505243F487B00E75783 /* PluginLookAndFeel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PluginLookAndFeel.cpp; path = ../../Source/PluginLookAndFeel.cpp; sourceTree = SOURCE_ROOT; };
 		4292AD05234A2A7B00362AB1 /* SoundTouch.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = SoundTouch.dylib; path = ../../../Libs/Builds/MacOSX/SoundTouch/SoundTouch.dylib; sourceTree = "<group>"; };
 		42DB65B4369FEBF779D5D5A8 /* Info-Standalone_Plugin.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-Standalone_Plugin.plist"; sourceTree = SOURCE_ROOT; };
 		43453E5FE4F80F4554A15E7D /* DiscRecording.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiscRecording.framework; path = System/Library/Frameworks/DiscRecording.framework; sourceTree = SDKROOT; };
@@ -256,6 +259,8 @@
 		0088A9025B92F166DAB25D36 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				42688505243F487B00E75783 /* PluginLookAndFeel.cpp */,
+				42688504243F487A00E75783 /* PluginLookAndFeel.h */,
 				061700A0E23CA1FF2ECB82AE /* PluginProcessor.cpp */,
 				75AEF3528BFEA2297A552D1F /* PluginProcessor.h */,
 				5D53D70EF72719A4B6E4C43E /* PluginEditor.cpp */,
@@ -673,6 +678,7 @@
 				8C0E0B2E090BD29869529746 /* include_juce_audio_utils.mm in Sources */,
 				19B6C002A45FFA9CD67F24C4 /* include_juce_core.mm in Sources */,
 				0BAD35A581F1B6492A716395 /* include_juce_cryptography.mm in Sources */,
+				42688506243F534B00E75783 /* PluginLookAndFeel.cpp in Sources */,
 				6933EDEEE897A1F6BB07A359 /* include_juce_data_structures.mm in Sources */,
 				9AA3E7F56213EFB4AFFBE554 /* include_juce_events.mm in Sources */,
 				562577A1287812A6E45117D4 /* include_juce_graphics.mm in Sources */,
