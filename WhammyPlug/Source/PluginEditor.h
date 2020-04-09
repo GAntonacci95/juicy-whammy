@@ -18,7 +18,8 @@
 /**
 */
 class WhammyPlugAudioProcessorEditor  : public AudioProcessorEditor,
-                                        public Slider::Listener
+                                        public Slider::Listener,
+                                        public Button::Listener
 {
 public:
     WhammyPlugAudioProcessorEditor (WhammyPlugAudioProcessor&);
@@ -31,6 +32,7 @@ public:
     void resized() override;
 
     void sliderValueChanged(Slider* slider) override;
+    void buttonClicked(Button* sender) override;
 
 private:
     WhammyPlugAudioProcessor& processor;
@@ -39,32 +41,23 @@ private:
 
     // Sliders to control the number of semitones
     Slider pedal_level;
-    Slider pitch_choice;
+//    Slider pitch_choice;
 
-    TextButton pedal;
     TextButton slider_container;
-    TextButton knob;
-    TextButton knob_container;
-    TextButton boxes;
+//    TextButton knob_container;
     TextButton boxes_container;
+    
+    TextButton pedal;
+//    TextButton knob;
+    TextButton boxes;
 
-    // semitones up
-    TextButton two_semitones_up;
-    TextButton four_semitones_up;
-    TextButton five_semitones_up;
-    TextButton seven_semitones_up;
-    TextButton nine_semitones_up;
-    TextButton eleven_semitones_up;
-    TextButton twelve_semitones_up;
-
-    // semitones down
-    TextButton two_semitones_down;
-    TextButton four_semitones_down;
-    TextButton five_semitones_down;
-    TextButton seven_semitones_down;
-    TextButton nine_semitones_down;
-    TextButton eleven_semitones_down;
-    TextButton twelve_semitones_down;
+    // semitones
+    static const int N_OPTIONS = 14;
+    static const inline String OPTIONS[] = {
+        "+8th", "+7th", "+6th", "+5th", "+4th", "+3rd", "+2nd",
+        "-2nd", "-3rd", "-4th", "-5th", "-6th", "-7th", "-8th"
+    };
+    TextButton optionButtons[N_OPTIONS];
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WhammyPlugAudioProcessorEditor)
 };
