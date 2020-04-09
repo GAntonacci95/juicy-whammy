@@ -37,10 +37,11 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
     // max_pitch must be the maximum value selected using the rotary slider
     addAndMakeVisible(&pedal_level);
     pedal_level.setSliderStyle(Slider::LinearVertical);
-    pedal_level.setRange(-12, 12); // initialization value
-    pedal_level.setTextBoxStyle(Slider::NoTextBox, false, 90, 0);
+    pedal_level.setRange(-12, 12, 1.0);
+    pedal_level.setTextBoxStyle(Slider::NoTextBox, false, 90, 20);
     pedal_level.setPopupDisplayEnabled(true, true, this);
     pedal_level.setTextValueSuffix(" semitones");
+    pedal_level.setNumDecimalPlacesToDisplay(2);
     pedal_level.setValue(0);
     pedal_level.addListener(this);
 
@@ -48,7 +49,7 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
     addAndMakeVisible(&pitch_choice);
     pitch_choice.setSliderStyle(Slider::Rotary);
     pitch_choice.setRange(-12, 12, 1.0);
-    pitch_choice.setTextBoxStyle(Slider::NoTextBox, false, 90, 0);
+    pitch_choice.setTextBoxStyle(Slider::NoTextBox, false, 90, 20);
     pitch_choice.setValue(0.0);
     pitch_choice.addListener(this);
     // to change the maximum range of pitch shifting according to the chosen number of semitones
@@ -56,12 +57,19 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
         if (pitch_choice.getValue() > 0) {
             pedal_level.setRange(0, pitch_choice.getValue(), dontSendNotification);
             pedal_level.setValue(0.0);
-            customLookAndFeel.high = -1;
+            pedal_level.setNumDecimalPlacesToDisplay(2);
         }
         else if (pitch_choice.getValue() < 0) {
-            pedal_level.setRange(pitch_choice.getValue(), 0, dontSendNotification);
+            auto range = NormalisableRange<double>(pitch_choice.getValue(), 0.0,
+                [](auto rangeStart, auto rangeEnd, auto normalised)
+                {return jmap(normalised, rangeEnd, rangeStart); },
+                [](auto rangeStart, auto rangeEnd, auto value)
+                {return jmap(value, rangeEnd, rangeStart, 0.0, 1.0); },
+                [](auto rangeStart, auto rangeEnd, auto value)
+                {return value; });
+            pedal_level.setNormalisableRange(range);
+            pedal_level.setNumDecimalPlacesToDisplay(2);
             pedal_level.setValue(0.0);
-            customLookAndFeel.high = 1;
         }
     };
 
@@ -70,8 +78,8 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
     two_semitones_up.setButtonText("+2nd");
     two_semitones_up.setColour(TextButton::textColourOffId, Colours::black);
     two_semitones_up.onClick = [this] {
+        pitch_choice.setValue(0.0);
         two_semitones_up.setColour(TextButton::buttonColourId, Colours::yellow);
-        // SETTARE TUTTI GLI ALTRI AL COLORE ORIGINALE
         four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
@@ -86,6 +94,7 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
         eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         pedal_level.setRange(0, 2);
+        pedal_level.setNumDecimalPlacesToDisplay(2);
         pedal_level.setValue(0.0);
     };
     addAndMakeVisible(two_semitones_up);
@@ -94,8 +103,8 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
     four_semitones_up.setButtonText("+3rd");
     four_semitones_up.setColour(TextButton::textColourOffId, Colours::black);
     four_semitones_up.onClick = [this] {
+        pitch_choice.setValue(0.0);
         four_semitones_up.setColour(TextButton::buttonColourId, Colours::yellow);
-        // SETTARE TUTTI GLI ALTRI AL COLORE ORIGINALE
         two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
@@ -110,6 +119,7 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
         eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         pedal_level.setRange(0, 4);
+        pedal_level.setNumDecimalPlacesToDisplay(2);
         pedal_level.setValue(0.0);
     };
     addAndMakeVisible(four_semitones_up);
@@ -118,8 +128,8 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
     five_semitones_up.setButtonText("+4th");
     five_semitones_up.setColour(TextButton::textColourOffId, Colours::black);
     five_semitones_up.onClick = [this] {
+        pitch_choice.setValue(0.0);
         five_semitones_up.setColour(TextButton::buttonColourId, Colours::yellow);
-        // SETTARE TUTTI GLI ALTRI AL COLORE ORIGINALE
         two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
@@ -134,6 +144,7 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
         eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         pedal_level.setRange(0, 5);
+        pedal_level.setNumDecimalPlacesToDisplay(2);
         pedal_level.setValue(0.0);
     };
     addAndMakeVisible(five_semitones_up);
@@ -142,8 +153,8 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
     seven_semitones_up.setButtonText("+5th");
     seven_semitones_up.setColour(TextButton::textColourOffId, Colours::black);
     seven_semitones_up.onClick = [this] {
+        pitch_choice.setValue(0.0);
         seven_semitones_up.setColour(TextButton::buttonColourId, Colours::yellow);
-        // SETTARE TUTTI GLI ALTRI AL COLORE ORIGINALE
         two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
@@ -158,6 +169,7 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
         eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         pedal_level.setRange(0, 7);
+        pedal_level.setNumDecimalPlacesToDisplay(2);
         pedal_level.setValue(0.0);
     };
     addAndMakeVisible(seven_semitones_up);
@@ -166,8 +178,8 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
     nine_semitones_up.setButtonText("+6th");
     nine_semitones_up.setColour(TextButton::textColourOffId, Colours::black);
     nine_semitones_up.onClick = [this] {
+        pitch_choice.setValue(0.0);
         nine_semitones_up.setColour(TextButton::buttonColourId, Colours::yellow);
-        // SETTARE TUTTI GLI ALTRI AL COLORE ORIGINALE
         two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
@@ -182,6 +194,7 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
         eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         pedal_level.setRange(0, 9);
+        pedal_level.setNumDecimalPlacesToDisplay(2);
         pedal_level.setValue(0.0);
     };
     addAndMakeVisible(nine_semitones_up);
@@ -190,8 +203,8 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
     eleven_semitones_up.setButtonText("+7th");
     eleven_semitones_up.setColour(TextButton::textColourOffId, Colours::black);
     eleven_semitones_up.onClick = [this] {
+        pitch_choice.setValue(0.0);
         eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::yellow);
-        // SETTARE TUTTI GLI ALTRI AL COLORE ORIGINALE
         two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
@@ -206,6 +219,7 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
         eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         pedal_level.setRange(0, 11);
+        pedal_level.setNumDecimalPlacesToDisplay(2);
         pedal_level.setValue(0.0);
     };
     addAndMakeVisible(eleven_semitones_up);
@@ -214,8 +228,8 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
     twelve_semitones_up.setButtonText("+octave");
     twelve_semitones_up.setColour(TextButton::textColourOffId, Colours::black);
     twelve_semitones_up.onClick = [this] {
+        pitch_choice.setValue(0.0);
         twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::yellow);
-        // SETTARE TUTTI GLI ALTRI AL COLORE ORIGINALE
         two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
@@ -230,6 +244,7 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
         eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         pedal_level.setRange(0, 12);
+        pedal_level.setNumDecimalPlacesToDisplay(2);
         pedal_level.setValue(0.0);
     };
     addAndMakeVisible(twelve_semitones_up);
@@ -238,8 +253,8 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
     two_semitones_down.setButtonText("-2nd");
     two_semitones_down.setColour(TextButton::textColourOffId, Colours::black);
     two_semitones_down.onClick = [this] {
+        pitch_choice.setValue(0.0);
         two_semitones_down.setColour(TextButton::buttonColourId, Colours::yellow);
-        // SETTARE TUTTI GLI ALTRI AL COLORE ORIGINALE
         two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
@@ -253,7 +268,16 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
         nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        pedal_level.setRange(-2, 0);
+        
+        auto range = NormalisableRange<double>(-2.0, 0.0,
+            [](auto rangeStart, auto rangeEnd, auto normalised)
+            {return jmap(normalised, rangeEnd, rangeStart); },
+            [](auto rangeStart, auto rangeEnd, auto value)
+            {return jmap(value, rangeEnd, rangeStart, 0.0, 1.0); },
+            [](auto rangeStart, auto rangeEnd, auto value)
+            {return value; });
+        pedal_level.setNormalisableRange(range);
+        pedal_level.setNumDecimalPlacesToDisplay(2);
         pedal_level.setValue(0.0);
     };
     addAndMakeVisible(two_semitones_down);
@@ -262,8 +286,8 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
     four_semitones_down.setButtonText("-3rd");
     four_semitones_down.setColour(TextButton::textColourOffId, Colours::black);
     four_semitones_down.onClick = [this] {
+        pitch_choice.setValue(0.0);
         four_semitones_down.setColour(TextButton::buttonColourId, Colours::yellow);
-        // SETTARE TUTTI GLI ALTRI AL COLORE ORIGINALE
         two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
@@ -277,7 +301,17 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
         nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        pedal_level.setRange(-4, 0);
+
+        auto range = NormalisableRange<double>(-4.0, 0.0,
+            [](auto rangeStart, auto rangeEnd, auto normalised)
+            {return jmap(normalised, rangeEnd, rangeStart); },
+            [](auto rangeStart, auto rangeEnd, auto value)
+            {return jmap(value, rangeEnd, rangeStart, 0.0, 1.0); },
+            [](auto rangeStart, auto rangeEnd, auto value)
+            {return value; });
+        pedal_level.setNormalisableRange(range);
+        pedal_level.setNumDecimalPlacesToDisplay(2);
+
         pedal_level.setValue(0.0);
     };
     addAndMakeVisible(four_semitones_down);
@@ -286,8 +320,8 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
     five_semitones_down.setButtonText("-4th");
     five_semitones_down.setColour(TextButton::textColourOffId, Colours::black);
     five_semitones_down.onClick = [this] {
+        pitch_choice.setValue(0.0);
         five_semitones_down.setColour(TextButton::buttonColourId, Colours::yellow);
-        // SETTARE TUTTI GLI ALTRI AL COLORE ORIGINALE
         two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
@@ -301,7 +335,17 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
         nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        pedal_level.setRange(-5, 0);
+        
+        auto range = NormalisableRange<double>(-5.0, 0.0,
+            [](auto rangeStart, auto rangeEnd, auto normalised)
+            {return jmap(normalised, rangeEnd, rangeStart); },
+            [](auto rangeStart, auto rangeEnd, auto value)
+            {return jmap(value, rangeEnd, rangeStart, 0.0, 1.0); },
+            [](auto rangeStart, auto rangeEnd, auto value)
+            {return value; });
+        pedal_level.setNormalisableRange(range);
+        pedal_level.setNumDecimalPlacesToDisplay(2);
+
         pedal_level.setValue(0.0);
     };
     addAndMakeVisible(five_semitones_down);
@@ -310,8 +354,8 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
     seven_semitones_down.setButtonText("-5th");
     seven_semitones_down.setColour(TextButton::textColourOffId, Colours::black);
     seven_semitones_down.onClick = [this] {
+        pitch_choice.setValue(0.0);
         seven_semitones_down.setColour(TextButton::buttonColourId, Colours::yellow);
-        // SETTARE TUTTI GLI ALTRI AL COLORE ORIGINALE
         two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
@@ -325,7 +369,17 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
         nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        pedal_level.setRange(-7, 0);
+        
+        auto range = NormalisableRange<double>(-7.0, 0.0,
+            [](auto rangeStart, auto rangeEnd, auto normalised)
+            {return jmap(normalised, rangeEnd, rangeStart); },
+            [](auto rangeStart, auto rangeEnd, auto value)
+            {return jmap(value, rangeEnd, rangeStart, 0.0, 1.0); },
+            [](auto rangeStart, auto rangeEnd, auto value)
+            {return value; });
+        pedal_level.setNormalisableRange(range);
+        pedal_level.setNumDecimalPlacesToDisplay(2);
+
         pedal_level.setValue(0.0);
     };
     addAndMakeVisible(seven_semitones_down);
@@ -334,8 +388,8 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
     nine_semitones_down.setButtonText("-6th");
     nine_semitones_down.setColour(TextButton::textColourOffId, Colours::black);
     nine_semitones_down.onClick = [this] {
+        pitch_choice.setValue(0.0);
         nine_semitones_down.setColour(TextButton::buttonColourId, Colours::yellow);
-        // SETTARE TUTTI GLI ALTRI AL COLORE ORIGINALE
         two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
@@ -349,7 +403,17 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
         seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        pedal_level.setRange(-9, 0);
+        
+        auto range = NormalisableRange<double>(-9.0, 0.0,
+            [](auto rangeStart, auto rangeEnd, auto normalised)
+            {return jmap(normalised, rangeEnd, rangeStart); },
+            [](auto rangeStart, auto rangeEnd, auto value)
+            {return jmap(value, rangeEnd, rangeStart, 0.0, 1.0); },
+            [](auto rangeStart, auto rangeEnd, auto value)
+            {return value; });
+        pedal_level.setNormalisableRange(range);
+        pedal_level.setNumDecimalPlacesToDisplay(2);
+
         pedal_level.setValue(0.0);
     };
     addAndMakeVisible(nine_semitones_down);
@@ -358,8 +422,8 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
     eleven_semitones_down.setButtonText("-7th");
     eleven_semitones_down.setColour(TextButton::textColourOffId, Colours::black);
     eleven_semitones_down.onClick = [this] {
+        pitch_choice.setValue(0.0);
         eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::yellow);
-        // SETTARE TUTTI GLI ALTRI AL COLORE ORIGINALE
         two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
@@ -374,7 +438,16 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
         nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
 
-        pedal_level.setRange(-11, 0);
+        auto range = NormalisableRange<double>(-11.0, 0.0,
+            [](auto rangeStart, auto rangeEnd, auto normalised)
+            {return jmap(normalised, rangeEnd, rangeStart); },
+            [](auto rangeStart, auto rangeEnd, auto value)
+            {return jmap(value, rangeEnd, rangeStart, 0.0, 1.0); },
+            [](auto rangeStart, auto rangeEnd, auto value)
+            {return value; });
+        pedal_level.setNormalisableRange(range);
+        pedal_level.setNumDecimalPlacesToDisplay(2);
+
         pedal_level.setValue(0.0);
     };
     addAndMakeVisible(eleven_semitones_down);
@@ -383,8 +456,8 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
     twelve_semitones_down.setButtonText("-octave");
     twelve_semitones_down.setColour(TextButton::textColourOffId, Colours::black);
     twelve_semitones_down.onClick = [this] {
+        pitch_choice.setValue(0.0);
         twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::yellow);
-        // SETTARE TUTTI GLI ALTRI AL COLORE ORIGINALE
         two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
         five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
@@ -399,7 +472,16 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
         nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
 
-        pedal_level.setRange(-12, 0);
+        auto range = NormalisableRange<double>(-12.0, 0.0,
+            [](auto rangeStart, auto rangeEnd, auto normalised)
+            {return jmap(normalised, rangeEnd, rangeStart); },
+            [](auto rangeStart, auto rangeEnd, auto value)
+            {return jmap(value, rangeEnd, rangeStart, 0.0, 1.0); },
+            [](auto rangeStart, auto rangeEnd, auto value)
+            {return value; });
+        pedal_level.setNormalisableRange(range);
+        pedal_level.setNumDecimalPlacesToDisplay(2);
+
         pedal_level.setValue(0.0);
     };
     addAndMakeVisible(twelve_semitones_down);
@@ -638,6 +720,25 @@ void WhammyPlugAudioProcessorEditor::paint (Graphics& g)
         nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
         eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
     }
+    else if (processor.knob_value == 1 || processor.knob_value == 3 || processor.knob_value == 6 || processor.knob_value == 8
+            || processor.knob_value == 10 || processor.knob_value == -1 || processor.knob_value == -3 || processor.knob_value == -6
+            || processor.knob_value == -8 || processor.knob_value == -10) {
+        // no button must be selected because these intervals are not considered
+        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
+        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
+        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
+        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
+        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
+        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
+        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
+        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
+        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
+        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
+        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
+        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
+        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
+        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
+    }
 }
 
 void WhammyPlugAudioProcessorEditor::resized()
@@ -677,7 +778,6 @@ void WhammyPlugAudioProcessorEditor::resized()
     boxes_container.setBounds(boxes_container_area.removeFromTop(50));
 
     auto boxes_height = boxes_container_area.getHeight() / 15; // 22
-    // auto boxes_margin = 3;
 
     twelve_semitones_up.setBounds(boxes_container_area.removeFromTop(boxes_height).reduced(boxes_container_margin));
     eleven_semitones_up.setBounds(boxes_container_area.removeFromTop(boxes_height).reduced(boxes_container_margin));

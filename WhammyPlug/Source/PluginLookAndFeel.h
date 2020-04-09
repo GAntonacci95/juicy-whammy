@@ -9,10 +9,6 @@ public:
 	virtual ~PluginLookAndFeel();
     
     //==============================================================================
-    /* int to keep track of the position of the slider
-       used in drawLinearSlider and PluginEditor.cpp initializations*/
-
-    int high = 0;
     //==============================================================================
 
     virtual void drawLinearSlider(Graphics& g, int x, int y, int width, int height, float sliderPos,

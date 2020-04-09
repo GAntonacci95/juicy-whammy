@@ -18,16 +18,13 @@ void PluginLookAndFeel::drawLinearSlider(Graphics& g, int x, int y, int width, i
     {
         if (slider.isVertical()) {
             g.setColour(Colours::black.withAlpha(1.0f));
-            if (high == 1) {
-                g.fillRect(width * 7 / 18, y, width * 2 / 9, y);
-            }
-            else if (high == -1) {
-                g.fillRect(width * 7 / 18, y + height, width * 2 / 9, y);
-            }
+            
+            g.fillRect(width * 7 / 18, y + height, width * 2 / 9, y);        
             g.fillRect(width * 7 / 18, (int)sliderPos, width * 2 / 9, height / 30);
-
+            
             g.setColour(Colours::black.withAlpha(0.4f));
             g.fillRect(width / 2 - width / 20, y + (int)sliderPos, width / 10, height);
+            
         }
     }
 }

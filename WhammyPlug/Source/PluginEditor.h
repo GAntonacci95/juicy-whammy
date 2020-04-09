@@ -41,7 +41,6 @@ private:
     Slider pedal_level;
     Slider pitch_choice;
 
-    // provare a usare dei rettangoli come container!!!!!
     TextButton pedal;
     TextButton slider_container;
     TextButton knob;
