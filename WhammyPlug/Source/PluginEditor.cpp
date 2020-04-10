@@ -76,9 +76,11 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
     // Boxes for semitones
     for (int i = 0; i < N_OPTIONS; i++)
     {
+        OPTIONS.set(OPTION_KEYS[i], OPTION_VALUES[i]);
+        
         optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
         optionButtons[i].setColour(TextButton::textColourOffId, Colours::black);
-        optionButtons[i].setButtonText(OPTIONS[i]);
+        optionButtons[i].setButtonText(OPTION_KEYS[i]);
         
         optionButtons[i].addListener(this);
         addAndMakeVisible(optionButtons[i]);
@@ -380,8 +382,10 @@ void WhammyPlugAudioProcessorEditor::resized()
 
     auto boxes_height = boxes_container_area.getHeight() / 15; // 22
     
-    for (int i = 0; i < N_OPTIONS; i++)
-        optionButtons[i]
+//    for (int i = 0; i < N_OPTIONS; i++)
+//        optionButtons[i]
+    for(TextButton& button : optionButtons)
+        button
             .setBounds(boxes_container_area.removeFromTop(boxes_height)
             .reduced(boxes_container_margin));
     
@@ -414,12 +418,11 @@ void WhammyPlugAudioProcessorEditor::sliderValueChanged(Slider* s)
 void WhammyPlugAudioProcessorEditor::buttonClicked(Button* sender)
 {
 //    pitch_choice.setValue(0.0); // TODO: rimuovere del tutto la knob?
-    for(int j = 0; j < N_OPTIONS; j++)
-        if(&(optionButtons[j]) != sender)
-            optionButtons[j].setColour(TextButton::buttonColourId, Colours::maroon);
+    for(TextButton& button : optionButtons)
+            button.setColour(TextButton::buttonColourId, Colours::maroon);
     sender->setColour(TextButton::buttonColourId, Colours::yellow);
 
-    pedal_level.setRange(0, std::atoi(sender->getButtonText().substring(0, 2).getCharPointer()));
+    pedal_level.setRange(0, OPTIONS[sender->getButtonText()]);
     pedal_level.setValue(0.0);
     pedal_level.setNumDecimalPlacesToDisplay(2);
 }
