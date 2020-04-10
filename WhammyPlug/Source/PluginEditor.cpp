@@ -37,12 +37,12 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
     // max_pitch must be the maximum value selected using the rotary slider
     addAndMakeVisible(&pedal_level);
     pedal_level.setSliderStyle(Slider::LinearVertical);
-    pedal_level.setRange(-12, 12, 1.0);
+    pedal_level.setRange(-12, 12);
     pedal_level.setTextBoxStyle(Slider::NoTextBox, false, 90, 20);
     pedal_level.setPopupDisplayEnabled(true, true, this);
     pedal_level.setTextValueSuffix(" semitones");
     pedal_level.setNumDecimalPlacesToDisplay(2);
-    pedal_level.setValue(0);
+    pedal_level.setValue(0.0);
     pedal_level.addListener(this);
 
     // Slider that is used to choose the amount of pitch shift
@@ -50,7 +50,7 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
     pitch_choice.setSliderStyle(Slider::Rotary);
     pitch_choice.setRange(-12, 12, 1.0);
     pitch_choice.setTextBoxStyle(Slider::NoTextBox, false, 90, 20);
-    pitch_choice.setValue(0.0);
+    pitch_choice.setValue(12.0);
     pitch_choice.addListener(this);
     // to change the maximum range of pitch shifting according to the chosen number of semitones
     pitch_choice.onValueChange = [this] {
