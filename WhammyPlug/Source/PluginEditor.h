@@ -17,9 +17,7 @@
 //==============================================================================
 /**
 */
-class WhammyPlugAudioProcessorEditor  : public AudioProcessorEditor,
-                                        public Slider::Listener,
-                                        public Button::Listener
+class WhammyPlugAudioProcessorEditor  : public AudioProcessorEditor
 {
 public:
     WhammyPlugAudioProcessorEditor (WhammyPlugAudioProcessor&);
@@ -30,10 +28,6 @@ public:
 
     void paint(Graphics&) override;
     void resized() override;
-    int getParameters(int button_index);
-
-    void sliderValueChanged(Slider* slider) override;
-    void buttonClicked(Button* sender) override;
 
 private:
     WhammyPlugAudioProcessor& processor;
@@ -65,6 +59,12 @@ private:
     HashMap<String, int> OPTIONS;
     
     TextButton optionButtons[N_OPTIONS];
+    
+    void pedalValueChanged(Slider* sender);
+    void pedalMaxValueSetup(int option_index);
+    void updateOptionButtonAppearence(Button* which);
+    void knobValueChanged(Slider* sender);
+    void optionButtonClicked(Button* sender);
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WhammyPlugAudioProcessorEditor)
 };

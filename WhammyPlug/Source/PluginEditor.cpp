@@ -8,7 +8,6 @@
   ==============================================================================
 */
 
-#include "PluginProcessor.h"
 #include "PluginEditor.h"
 
 //==============================================================================
@@ -37,43 +36,37 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor(WhammyPlugAudioPr
     // max_pitch must be the maximum value selected using the rotary slider
     addAndMakeVisible(&pedal_level);
     pedal_level.setSliderStyle(Slider::LinearVertical);
-    pedal_level.setRange(-12, 12);
+    pedal_level.setRange(0, 12, 0.01);
     pedal_level.setTextBoxStyle(Slider::NoTextBox, false, 90, 20);
     pedal_level.setPopupDisplayEnabled(true, true, this);
     pedal_level.setTextValueSuffix(" semitones");
-    pedal_level.setNumDecimalPlacesToDisplay(2);
-    pedal_level.setValue(0.0);
-    pedal_level.addListener(this);
+    pedal_level.onValueChange = [this](){ pedalValueChanged(&pedal_level); };
 
     // Slider that is used to choose the amount of pitch shift
     addAndMakeVisible(&pitch_choice);
     pitch_choice.setSliderStyle(Slider::Rotary);
-    pitch_choice.setRange(-12, 12, 1.0);
+    pitch_choice.setRange(0, N_OPTIONS - 1, 1.0);
+    // default for triggering the initial update via optionButtons[0].triggerClick();
+    // @ the end of the function
+    pitch_choice.setValue(N_OPTIONS - 1);
     pitch_choice.setTextBoxStyle(Slider::NoTextBox, false, 90, 20);
-    pitch_choice.setValue(12.0);
-    pitch_choice.addListener(this);
+    pitch_choice.onValueChange = [this](){ knobValueChanged(&pitch_choice); };
 
     // Boxes for semitones
     for (int i = 0; i < N_OPTIONS; i++)
     {
         OPTIONS.set(OPTION_KEYS[i], OPTION_VALUES[i]);
-
+        
+        addAndMakeVisible(optionButtons[i]);
         optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
         optionButtons[i].setColour(TextButton::textColourOffId, Colours::black);
         optionButtons[i].setButtonText(OPTION_KEYS[i]);
 
-        optionButtons[i].addListener(this);
-        addAndMakeVisible(optionButtons[i]);
+        optionButtons[i].onClick = [this, i](){ optionButtonClicked(&(optionButtons[i])); };
     }
-    getParameters(0);
-    buttonClicked(&(optionButtons[0]));
+    
+    optionButtons[0].triggerClick();
 }
-
-
-int WhammyPlugAudioProcessorEditor::getParameters(int button_index) {
-    return OPTIONS[OPTION_KEYS[button_index]];
-}
-
 
 WhammyPlugAudioProcessorEditor::~WhammyPlugAudioProcessorEditor()
 {
@@ -129,204 +122,18 @@ void WhammyPlugAudioProcessorEditor::resized()
             .reduced(boxes_container_margin));
 }
 
-void WhammyPlugAudioProcessorEditor::sliderValueChanged(Slider* s)
+void WhammyPlugAudioProcessorEditor::pedalValueChanged(Slider* s)
 {
-    if (s == &pedal_level) {
-        processor.setPitchSemiTones(s->getValue());
-    }
-    else if (s == &pitch_choice) {
-        processor.knob_value = s->getValue();
-
-        if (s->getValue() > 0) {
-            pedal_level.setRange(0, s->getValue());
-            pedal_level.setValue(0.0);
-            pedal_level.setNumDecimalPlacesToDisplay(2);
-        }
-        else if (s->getValue() < 0) {
-            auto range = NormalisableRange<double>(s->getValue(), 0.0,
-                [](auto rangeStart, auto rangeEnd, auto normalised)
-                { return jmap(normalised, rangeEnd, rangeStart); },
-                [](auto rangeStart, auto rangeEnd, auto value)
-                { return jmap(value, rangeEnd, rangeStart, 0.0, 1.0); },
-                [](auto rangeStart, auto rangeEnd, auto value)
-                { return value; });
-            pedal_level.setNormalisableRange(range);
-            pedal_level.setNumDecimalPlacesToDisplay(2);
-            pedal_level.setValue(0.0);
-        }
-
-        switch (processor.knob_value) {
-        case 12:
-            optionButtons[0].setColour(TextButton::buttonColourId, Colours::yellow);
-            for (int i = 0; i < N_OPTIONS; i++) {
-                if (i != 0)
-                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
-            }
-            break;
-        case 11:
-            optionButtons[1].setColour(TextButton::buttonColourId, Colours::yellow);
-            for (int i = 0; i < N_OPTIONS; i++) {
-                if (i != 1)
-                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
-            }
-            break;
-        case 9:
-            optionButtons[2].setColour(TextButton::buttonColourId, Colours::yellow);
-            for (int i = 0; i < N_OPTIONS; i++) {
-                if (i != 2)
-                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
-            }
-            break;
-        case 7:
-            optionButtons[3].setColour(TextButton::buttonColourId, Colours::yellow);
-            for (int i = 0; i < N_OPTIONS; i++) {
-                if (i != 3)
-                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
-            }
-            break;
-        case 5:
-            optionButtons[4].setColour(TextButton::buttonColourId, Colours::yellow);
-            for (int i = 0; i < N_OPTIONS; i++) {
-                if (i != 4)
-                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
-            }
-            break;
-        case 4:
-            optionButtons[5].setColour(TextButton::buttonColourId, Colours::yellow);
-            for (int i = 0; i < N_OPTIONS; i++) {
-                if (i != 5)
-                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
-            }
-            break;
-        case 2:
-            optionButtons[6].setColour(TextButton::buttonColourId, Colours::yellow);
-            for (int i = 0; i < N_OPTIONS; i++) {
-                if (i != 6)
-                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
-            }
-            break;
-
-        case -2:
-            optionButtons[7].setColour(TextButton::buttonColourId, Colours::yellow);
-            for (int i = 0; i < N_OPTIONS; i++) {
-                if (i != 7)
-                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
-            }
-            break;
-        case -4:
-            optionButtons[8].setColour(TextButton::buttonColourId, Colours::yellow);
-            for (int i = 0; i < N_OPTIONS; i++) {
-                if (i != 8)
-                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
-            }
-            break;
-        case -5:
-            optionButtons[9].setColour(TextButton::buttonColourId, Colours::yellow);
-            for (int i = 0; i < N_OPTIONS; i++) {
-                if (i != 9)
-                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
-            }
-            break;
-        case -7:
-            optionButtons[10].setColour(TextButton::buttonColourId, Colours::yellow);
-            for (int i = 0; i < N_OPTIONS; i++) {
-                if (i != 10)
-                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
-            }
-            break;
-        case -9:
-            optionButtons[11].setColour(TextButton::buttonColourId, Colours::yellow);
-            for (int i = 0; i < N_OPTIONS; i++) {
-                if (i != 11)
-                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
-            }
-            break;
-        case -11:
-            optionButtons[12].setColour(TextButton::buttonColourId, Colours::yellow);
-            for (int i = 0; i < N_OPTIONS; i++) {
-                if (i != 12)
-                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
-            }
-            break;
-        case -12:
-            optionButtons[13].setColour(TextButton::buttonColourId, Colours::yellow);
-            for (int i = 0; i < N_OPTIONS; i++) {
-                if (i != 13)
-                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
-            }
-            break;
-        case -1:
-            for (int i = 0; i < N_OPTIONS; i++) {
-                optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
-            }
-            break;
-        case 1:
-            for (int i = 0; i < N_OPTIONS; i++) {
-                optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
-            }
-            break;
-        case 3:
-            for (int i = 0; i < N_OPTIONS; i++) {
-                optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
-            }
-            break;
-        case -3:
-            for (int i = 0; i < N_OPTIONS; i++) {
-                optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
-            }
-            break;
-        case 6:
-            for (int i = 0; i < N_OPTIONS; i++) {
-                optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
-            }
-            break;
-        case -6:
-            for (int i = 0; i < N_OPTIONS; i++) {
-                optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
-            }
-            break;
-        case 8:
-            for (int i = 0; i < N_OPTIONS; i++) {
-                optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
-            }
-            break;
-        case -8:
-            for (int i = 0; i < N_OPTIONS; i++) {
-                optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
-            }
-            break;
-        case 10:
-            for (int i = 0; i < N_OPTIONS; i++) {
-                optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
-            }
-            break;
-        case -10:
-            for (int i = 0; i < N_OPTIONS; i++) {
-                optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
-            }
-            break;
-        }
-    }
+    processor.setPitchSemiTones(s->getValue());
 }
 
-void WhammyPlugAudioProcessorEditor::buttonClicked(Button* sender)
+void WhammyPlugAudioProcessorEditor::pedalMaxValueSetup(int option_index)
 {
-    auto max_range = 0;
-    pitch_choice.setValue(0.0);
-
-    for (int j = 0; j < N_OPTIONS; j++)
-        if (&(optionButtons[j]) != sender)
-            optionButtons[j].setColour(TextButton::buttonColourId, Colours::maroon);
-        else if (&(optionButtons[j]) == sender)
-            max_range = getParameters(j); // seleziona il numero massimo di semitoni corrispondenti al tasto cliccato
-
-    sender->setColour(TextButton::buttonColourId, Colours::yellow);
-
-    if (max_range > 0) {
-        pedal_level.setRange(0, max_range);
-        pedal_level.setValue(0.0);
-    }
-    else if (max_range < 0) {
+    int max_range = OPTION_VALUES[option_index];
+    if (max_range > 0)
+        pedal_level.setRange(0, max_range, 0.01);
+    else
+    {
         auto range = NormalisableRange<double>(max_range, 0.0,
             [](auto rangeStart, auto rangeEnd, auto normalised)
             { return jmap(normalised, rangeEnd, rangeStart); },
@@ -334,8 +141,38 @@ void WhammyPlugAudioProcessorEditor::buttonClicked(Button* sender)
             { return jmap(value, rangeEnd, rangeStart, 0.0, 1.0); },
             [](auto rangeStart, auto rangeEnd, auto value)
             { return value; });
+        // TODO: cent interval here?! =(
         pedal_level.setNormalisableRange(range);
-        pedal_level.setValue(0.0);
     }
+    pedal_level.setValue(0.0);
     pedal_level.setNumDecimalPlacesToDisplay(2);
+}
+
+void WhammyPlugAudioProcessorEditor::updateOptionButtonAppearence(Button* which)
+{
+    for (int j = 0; j < N_OPTIONS; j++)
+        if (&(optionButtons[j]) != which)
+            optionButtons[j].setColour(TextButton::buttonColourId, Colours::maroon);
+    which->setColour(TextButton::buttonColourId, Colours::yellow);
+}
+
+void WhammyPlugAudioProcessorEditor::knobValueChanged(Slider *sender)
+{
+    int option_index = (int)sender->getValue();
+    // update of the pedal bound
+    pedalMaxValueSetup(option_index);
+    // and update of the button selection appearence
+    // avoiding further handler triggers
+    updateOptionButtonAppearence(&(optionButtons[option_index]));
+}
+
+void WhammyPlugAudioProcessorEditor::optionButtonClicked(Button* sender)
+{
+    for(int i = 0; i < N_OPTIONS; i++)
+        if(!OPTION_KEYS[i].compare(sender->getButtonText())) // useless indexOf =(
+        {
+            // trigger automatico di knobValueChanged
+            pitch_choice.setValue(i);
+            break;
+        }
 }
