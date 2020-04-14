@@ -30,6 +30,7 @@ public:
 
     void paint(Graphics&) override;
     void resized() override;
+    int getParameters(int button_index);
 
     void sliderValueChanged(Slider* slider) override;
     void buttonClicked(Button* sender) override;
@@ -41,14 +42,14 @@ private:
 
     // Sliders to control the number of semitones
     Slider pedal_level;
-//    Slider pitch_choice;
+    Slider pitch_choice;
 
     TextButton slider_container;
-//    TextButton knob_container;
+    TextButton knob_container;
     TextButton boxes_container;
     
     TextButton pedal;
-//    TextButton knob;
+    TextButton knob;
     TextButton boxes;
 
     // semitones
