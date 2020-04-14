@@ -112,11 +112,14 @@ void WhammyPlugAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     
     shifterL->setChannels(1);
     shifterR->setChannels(1);
-
-    // ALTER HERE, setup via SLIDER
     
-    shifterL->setPitchSemiTones(pitch_value);
-    shifterR->setPitchSemiTones(pitch_value);
+    setPitchSemiTones(0);
+}
+
+void WhammyPlugAudioProcessor::setPitchSemiTones(double pitch)
+{
+    shifterL->setPitchSemiTones(pitch);
+    shifterR->setPitchSemiTones(pitch);
 }
 
 void WhammyPlugAudioProcessor::releaseResources()

@@ -52,440 +52,28 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor (WhammyPlugAudioP
     pitch_choice.setTextBoxStyle(Slider::NoTextBox, false, 90, 20);
     pitch_choice.setValue(12.0);
     pitch_choice.addListener(this);
-    // to change the maximum range of pitch shifting according to the chosen number of semitones
-    pitch_choice.onValueChange = [this] {
-        if (pitch_choice.getValue() > 0) {
-            pedal_level.setRange(0, pitch_choice.getValue(), dontSendNotification);
-            pedal_level.setValue(0.0);
-            pedal_level.setNumDecimalPlacesToDisplay(2);
-        }
-        else if (pitch_choice.getValue() < 0) {
-            auto range = NormalisableRange<double>(pitch_choice.getValue(), 0.0,
-                [](auto rangeStart, auto rangeEnd, auto normalised)
-                {return jmap(normalised, rangeEnd, rangeStart); },
-                [](auto rangeStart, auto rangeEnd, auto value)
-                {return jmap(value, rangeEnd, rangeStart, 0.0, 1.0); },
-                [](auto rangeStart, auto rangeEnd, auto value)
-                {return value; });
-            pedal_level.setNormalisableRange(range);
-            pedal_level.setNumDecimalPlacesToDisplay(2);
-            pedal_level.setValue(0.0);
-        }
-    };
 
     // Boxes for semitones
-    two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-    two_semitones_up.setButtonText("+2nd");
-    two_semitones_up.setColour(TextButton::textColourOffId, Colours::black);
-    two_semitones_up.onClick = [this] {
-        pitch_choice.setValue(0.0);
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::yellow);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        pedal_level.setRange(0, 2);
-        pedal_level.setNumDecimalPlacesToDisplay(2);
-        pedal_level.setValue(0.0);
-    };
-    addAndMakeVisible(two_semitones_up);
+    for (int i = 0; i < N_OPTIONS; i++)
+    {
+        OPTIONS.set(OPTION_KEYS[i], OPTION_VALUES[i]);
 
-    four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-    four_semitones_up.setButtonText("+3rd");
-    four_semitones_up.setColour(TextButton::textColourOffId, Colours::black);
-    four_semitones_up.onClick = [this] {
-        pitch_choice.setValue(0.0);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::yellow);
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        pedal_level.setRange(0, 4);
-        pedal_level.setNumDecimalPlacesToDisplay(2);
-        pedal_level.setValue(0.0);
-    };
-    addAndMakeVisible(four_semitones_up);
-
-    five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-    five_semitones_up.setButtonText("+4th");
-    five_semitones_up.setColour(TextButton::textColourOffId, Colours::black);
-    five_semitones_up.onClick = [this] {
-        pitch_choice.setValue(0.0);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::yellow);
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        pedal_level.setRange(0, 5);
-        pedal_level.setNumDecimalPlacesToDisplay(2);
-        pedal_level.setValue(0.0);
-    };
-    addAndMakeVisible(five_semitones_up);
-
-    seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-    seven_semitones_up.setButtonText("+5th");
-    seven_semitones_up.setColour(TextButton::textColourOffId, Colours::black);
-    seven_semitones_up.onClick = [this] {
-        pitch_choice.setValue(0.0);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::yellow);
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        pedal_level.setRange(0, 7);
-        pedal_level.setNumDecimalPlacesToDisplay(2);
-        pedal_level.setValue(0.0);
-    };
-    addAndMakeVisible(seven_semitones_up);
-
-    nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-    nine_semitones_up.setButtonText("+6th");
-    nine_semitones_up.setColour(TextButton::textColourOffId, Colours::black);
-    nine_semitones_up.onClick = [this] {
-        pitch_choice.setValue(0.0);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::yellow);
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        pedal_level.setRange(0, 9);
-        pedal_level.setNumDecimalPlacesToDisplay(2);
-        pedal_level.setValue(0.0);
-    };
-    addAndMakeVisible(nine_semitones_up);
-
-    eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-    eleven_semitones_up.setButtonText("+7th");
-    eleven_semitones_up.setColour(TextButton::textColourOffId, Colours::black);
-    eleven_semitones_up.onClick = [this] {
-        pitch_choice.setValue(0.0);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::yellow);
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        pedal_level.setRange(0, 11);
-        pedal_level.setNumDecimalPlacesToDisplay(2);
-        pedal_level.setValue(0.0);
-    };
-    addAndMakeVisible(eleven_semitones_up);
-
-    twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-    twelve_semitones_up.setButtonText("+octave");
-    twelve_semitones_up.setColour(TextButton::textColourOffId, Colours::black);
-    twelve_semitones_up.onClick = [this] {
-        pitch_choice.setValue(0.0);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::yellow);
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        pedal_level.setRange(0, 12);
-        pedal_level.setNumDecimalPlacesToDisplay(2);
-        pedal_level.setValue(0.0);
-    };
-    addAndMakeVisible(twelve_semitones_up);
-
-    two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-    two_semitones_down.setButtonText("-2nd");
-    two_semitones_down.setColour(TextButton::textColourOffId, Colours::black);
-    two_semitones_down.onClick = [this] {
-        pitch_choice.setValue(0.0);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::yellow);
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
+        optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
+        optionButtons[i].setColour(TextButton::textColourOffId, Colours::black);
+        optionButtons[i].setButtonText(OPTION_KEYS[i]);
         
-        auto range = NormalisableRange<double>(-2.0, 0.0,
-            [](auto rangeStart, auto rangeEnd, auto normalised)
-            {return jmap(normalised, rangeEnd, rangeStart); },
-            [](auto rangeStart, auto rangeEnd, auto value)
-            {return jmap(value, rangeEnd, rangeStart, 0.0, 1.0); },
-            [](auto rangeStart, auto rangeEnd, auto value)
-            {return value; });
-        pedal_level.setNormalisableRange(range);
-        pedal_level.setNumDecimalPlacesToDisplay(2);
-        pedal_level.setValue(0.0);
-    };
-    addAndMakeVisible(two_semitones_down);
-
-    four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-    four_semitones_down.setButtonText("-3rd");
-    four_semitones_down.setColour(TextButton::textColourOffId, Colours::black);
-    four_semitones_down.onClick = [this] {
-        pitch_choice.setValue(0.0);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::yellow);
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-
-        auto range = NormalisableRange<double>(-4.0, 0.0,
-            [](auto rangeStart, auto rangeEnd, auto normalised)
-            {return jmap(normalised, rangeEnd, rangeStart); },
-            [](auto rangeStart, auto rangeEnd, auto value)
-            {return jmap(value, rangeEnd, rangeStart, 0.0, 1.0); },
-            [](auto rangeStart, auto rangeEnd, auto value)
-            {return value; });
-        pedal_level.setNormalisableRange(range);
-        pedal_level.setNumDecimalPlacesToDisplay(2);
-
-        pedal_level.setValue(0.0);
-    };
-    addAndMakeVisible(four_semitones_down);
-
-    five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-    five_semitones_down.setButtonText("-4th");
-    five_semitones_down.setColour(TextButton::textColourOffId, Colours::black);
-    five_semitones_down.onClick = [this] {
-        pitch_choice.setValue(0.0);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::yellow);
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        
-        auto range = NormalisableRange<double>(-5.0, 0.0,
-            [](auto rangeStart, auto rangeEnd, auto normalised)
-            {return jmap(normalised, rangeEnd, rangeStart); },
-            [](auto rangeStart, auto rangeEnd, auto value)
-            {return jmap(value, rangeEnd, rangeStart, 0.0, 1.0); },
-            [](auto rangeStart, auto rangeEnd, auto value)
-            {return value; });
-        pedal_level.setNormalisableRange(range);
-        pedal_level.setNumDecimalPlacesToDisplay(2);
-
-        pedal_level.setValue(0.0);
-    };
-    addAndMakeVisible(five_semitones_down);
-
-    seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-    seven_semitones_down.setButtonText("-5th");
-    seven_semitones_down.setColour(TextButton::textColourOffId, Colours::black);
-    seven_semitones_down.onClick = [this] {
-        pitch_choice.setValue(0.0);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::yellow);
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        
-        auto range = NormalisableRange<double>(-7.0, 0.0,
-            [](auto rangeStart, auto rangeEnd, auto normalised)
-            {return jmap(normalised, rangeEnd, rangeStart); },
-            [](auto rangeStart, auto rangeEnd, auto value)
-            {return jmap(value, rangeEnd, rangeStart, 0.0, 1.0); },
-            [](auto rangeStart, auto rangeEnd, auto value)
-            {return value; });
-        pedal_level.setNormalisableRange(range);
-        pedal_level.setNumDecimalPlacesToDisplay(2);
-
-        pedal_level.setValue(0.0);
-    };
-    addAndMakeVisible(seven_semitones_down);
-
-    nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-    nine_semitones_down.setButtonText("-6th");
-    nine_semitones_down.setColour(TextButton::textColourOffId, Colours::black);
-    nine_semitones_down.onClick = [this] {
-        pitch_choice.setValue(0.0);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::yellow);
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        
-        auto range = NormalisableRange<double>(-9.0, 0.0,
-            [](auto rangeStart, auto rangeEnd, auto normalised)
-            {return jmap(normalised, rangeEnd, rangeStart); },
-            [](auto rangeStart, auto rangeEnd, auto value)
-            {return jmap(value, rangeEnd, rangeStart, 0.0, 1.0); },
-            [](auto rangeStart, auto rangeEnd, auto value)
-            {return value; });
-        pedal_level.setNormalisableRange(range);
-        pedal_level.setNumDecimalPlacesToDisplay(2);
-
-        pedal_level.setValue(0.0);
-    };
-    addAndMakeVisible(nine_semitones_down);
-
-    eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-    eleven_semitones_down.setButtonText("-7th");
-    eleven_semitones_down.setColour(TextButton::textColourOffId, Colours::black);
-    eleven_semitones_down.onClick = [this] {
-        pitch_choice.setValue(0.0);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::yellow);
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-
-        auto range = NormalisableRange<double>(-11.0, 0.0,
-            [](auto rangeStart, auto rangeEnd, auto normalised)
-            {return jmap(normalised, rangeEnd, rangeStart); },
-            [](auto rangeStart, auto rangeEnd, auto value)
-            {return jmap(value, rangeEnd, rangeStart, 0.0, 1.0); },
-            [](auto rangeStart, auto rangeEnd, auto value)
-            {return value; });
-        pedal_level.setNormalisableRange(range);
-        pedal_level.setNumDecimalPlacesToDisplay(2);
-
-        pedal_level.setValue(0.0);
-    };
-    addAndMakeVisible(eleven_semitones_down);
-
-    twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-    twelve_semitones_down.setButtonText("-octave");
-    twelve_semitones_down.setColour(TextButton::textColourOffId, Colours::black);
-    twelve_semitones_down.onClick = [this] {
-        pitch_choice.setValue(0.0);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::yellow);
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-
-        auto range = NormalisableRange<double>(-12.0, 0.0,
-            [](auto rangeStart, auto rangeEnd, auto normalised)
-            {return jmap(normalised, rangeEnd, rangeStart); },
-            [](auto rangeStart, auto rangeEnd, auto value)
-            {return jmap(value, rangeEnd, rangeStart, 0.0, 1.0); },
-            [](auto rangeStart, auto rangeEnd, auto value)
-            {return value; });
-        pedal_level.setNormalisableRange(range);
-        pedal_level.setNumDecimalPlacesToDisplay(2);
-
-        pedal_level.setValue(0.0);
-    };
-    addAndMakeVisible(twelve_semitones_down);
+        optionButtons[i].addListener(this);
+        addAndMakeVisible(optionButtons[i]);
+    }
+    getParameters(0);
+    buttonClicked(&(optionButtons[0]));
 }
+
+
+int WhammyPlugAudioProcessorEditor::getParameters(int button_index) {
+    return OPTIONS[OPTION_KEYS[button_index]];
+}
+
 
 WhammyPlugAudioProcessorEditor::~WhammyPlugAudioProcessorEditor()
 {
@@ -495,250 +83,6 @@ WhammyPlugAudioProcessorEditor::~WhammyPlugAudioProcessorEditor()
 void WhammyPlugAudioProcessorEditor::paint (Graphics& g)
 {
     g.fillAll(Colours::darkred);
-
-    if (processor.knob_value == 2) {
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::yellow);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-    }
-    else if (processor.knob_value == 4) {
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::yellow);
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-    }
-    else if (processor.knob_value == 5) {
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::yellow);
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-    }
-    else if (processor.knob_value == 7) {
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::yellow);
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-    }
-    else if (processor.knob_value == 9) {
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::yellow);
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-    }
-    else if (processor.knob_value == 11) {
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::yellow);
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-    }
-    else if (processor.knob_value == 12) {
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::yellow);
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-    } 
-    else if (processor.knob_value == -2) {
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::yellow);
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-    }
-    else if (processor.knob_value == -4) {
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::yellow);
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-    }
-    else if (processor.knob_value == -5) {
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::yellow);
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-    }
-    else if (processor.knob_value == -7) {
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::yellow);
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-    }
-    else if (processor.knob_value == -9) {
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::yellow);
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-    }
-    else if (processor.knob_value == -11) {
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::yellow);
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-    }
-    else if (processor.knob_value == -12) {
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::yellow);
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-    }
-    else if (processor.knob_value == 1 || processor.knob_value == 3 || processor.knob_value == 6 || processor.knob_value == 8
-            || processor.knob_value == 10 || processor.knob_value == -1 || processor.knob_value == -3 || processor.knob_value == -6
-            || processor.knob_value == -8 || processor.knob_value == -10) {
-        // no button must be selected because these intervals are not considered
-        two_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_up.setColour(TextButton::buttonColourId, Colours::maroon);
-        two_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        four_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        five_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        seven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        nine_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        eleven_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-        twelve_semitones_down.setColour(TextButton::buttonColourId, Colours::maroon);
-    }
 }
 
 void WhammyPlugAudioProcessorEditor::resized()
@@ -778,31 +122,220 @@ void WhammyPlugAudioProcessorEditor::resized()
     boxes_container.setBounds(boxes_container_area.removeFromTop(50));
 
     auto boxes_height = boxes_container_area.getHeight() / 15; // 22
-
-    twelve_semitones_up.setBounds(boxes_container_area.removeFromTop(boxes_height).reduced(boxes_container_margin));
-    eleven_semitones_up.setBounds(boxes_container_area.removeFromTop(boxes_height).reduced(boxes_container_margin));
-    nine_semitones_up.setBounds(boxes_container_area.removeFromTop(boxes_height).reduced(boxes_container_margin));
-    seven_semitones_up.setBounds(boxes_container_area.removeFromTop(boxes_height).reduced(boxes_container_margin));
-    five_semitones_up.setBounds(boxes_container_area.removeFromTop(boxes_height).reduced(boxes_container_margin));
-    four_semitones_up.setBounds(boxes_container_area.removeFromTop(boxes_height).reduced(boxes_container_margin));
-    two_semitones_up.setBounds(boxes_container_area.removeFromTop(boxes_height).reduced(boxes_container_margin));
-
-    two_semitones_down.setBounds(boxes_container_area.removeFromTop(boxes_height).reduced(boxes_container_margin));
-    four_semitones_down.setBounds(boxes_container_area.removeFromTop(boxes_height).reduced(boxes_container_margin));
-    five_semitones_down.setBounds(boxes_container_area.removeFromTop(boxes_height).reduced(boxes_container_margin));
-    seven_semitones_down.setBounds(boxes_container_area.removeFromTop(boxes_height).reduced(boxes_container_margin));
-    nine_semitones_down.setBounds(boxes_container_area.removeFromTop(boxes_height).reduced(boxes_container_margin));
-    eleven_semitones_down.setBounds(boxes_container_area.removeFromTop(boxes_height).reduced(boxes_container_margin));
-    twelve_semitones_down.setBounds(boxes_container_area.removeFromTop(boxes_height).reduced(boxes_container_margin));
+    
+    for (int i = 0; i < N_OPTIONS; i++)
+        optionButtons[i]
+            .setBounds(boxes_container_area.removeFromTop(boxes_height)
+            .reduced(boxes_container_margin));
 }
-
 
 void WhammyPlugAudioProcessorEditor::sliderValueChanged(Slider* s)
 {
     if (s == &pedal_level) {
-        processor.pitch_value = s->getValue();
+        processor.setPitchSemiTones(s->getValue());
     }
     else if (s == &pitch_choice) {
         processor.knob_value = s->getValue();
+
+        if (s->getValue() > 0) {
+            pedal_level.setRange(0, s->getValue());
+            pedal_level.setValue(0.0);
+            pedal_level.setNumDecimalPlacesToDisplay(2);
+        }
+        else if (s->getValue() < 0) {
+            auto range = NormalisableRange<double>(s->getValue(), 0.0,
+                [](auto rangeStart, auto rangeEnd, auto normalised)
+                { return jmap(normalised, rangeEnd, rangeStart); },
+                [](auto rangeStart, auto rangeEnd, auto value)
+                { return jmap(value, rangeEnd, rangeStart, 0.0, 1.0); },
+                [](auto rangeStart, auto rangeEnd, auto value)
+                { return value; });
+            pedal_level.setNormalisableRange(range);
+            pedal_level.setNumDecimalPlacesToDisplay(2);
+            pedal_level.setValue(0.0);
+        }
+
+        switch (processor.knob_value) {
+        case 12:
+            optionButtons[0].setColour(TextButton::buttonColourId, Colours::yellow);
+            for (int i = 0; i < N_OPTIONS; i++) {
+                if (i != 0)
+                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
+            }
+            break;
+        case 11:
+            optionButtons[1].setColour(TextButton::buttonColourId, Colours::yellow);
+            for (int i = 0; i < N_OPTIONS; i++) {
+                if (i != 1)
+                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
+            }
+            break;
+        case 9:
+            optionButtons[2].setColour(TextButton::buttonColourId, Colours::yellow);
+            for (int i = 0; i < N_OPTIONS; i++) {
+                if (i != 2)
+                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
+            }
+            break;
+        case 7:
+            optionButtons[3].setColour(TextButton::buttonColourId, Colours::yellow);
+            for (int i = 0; i < N_OPTIONS; i++) {
+                if (i != 3)
+                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
+            }
+            break;
+        case 5:
+            optionButtons[4].setColour(TextButton::buttonColourId, Colours::yellow);
+            for (int i = 0; i < N_OPTIONS; i++) {
+                if (i != 4)
+                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
+            }
+            break;
+        case 4:
+            optionButtons[5].setColour(TextButton::buttonColourId, Colours::yellow);
+            for (int i = 0; i < N_OPTIONS; i++) {
+                if (i != 5)
+                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
+            }
+            break;
+        case 2:
+            optionButtons[6].setColour(TextButton::buttonColourId, Colours::yellow);
+            for (int i = 0; i < N_OPTIONS; i++) {
+                if (i != 6)
+                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
+            }
+            break;
+
+        case -2:
+            optionButtons[7].setColour(TextButton::buttonColourId, Colours::yellow);
+            for (int i = 0; i < N_OPTIONS; i++) {
+                if (i != 7)
+                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
+            }
+            break;
+        case -4:
+            optionButtons[8].setColour(TextButton::buttonColourId, Colours::yellow);
+            for (int i = 0; i < N_OPTIONS; i++) {
+                if (i != 8)
+                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
+            }
+            break;
+        case -5:
+            optionButtons[9].setColour(TextButton::buttonColourId, Colours::yellow);
+            for (int i = 0; i < N_OPTIONS; i++) {
+                if (i != 9)
+                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
+            }
+            break;
+        case -7:
+            optionButtons[10].setColour(TextButton::buttonColourId, Colours::yellow);
+            for (int i = 0; i < N_OPTIONS; i++) {
+                if (i != 10)
+                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
+            }
+            break;
+        case -9:
+            optionButtons[11].setColour(TextButton::buttonColourId, Colours::yellow);
+            for (int i = 0; i < N_OPTIONS; i++) {
+                if (i != 11)
+                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
+            }
+            break;
+        case -11:
+            optionButtons[12].setColour(TextButton::buttonColourId, Colours::yellow);
+            for (int i = 0; i < N_OPTIONS; i++) {
+                if (i != 12)
+                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
+            }
+            break;
+        case -12:
+            optionButtons[13].setColour(TextButton::buttonColourId, Colours::yellow);
+            for (int i = 0; i < N_OPTIONS; i++) {
+                if (i != 13)
+                    optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
+            }
+            break;
+        case -1:
+            for (int i = 0; i < N_OPTIONS; i++) {
+                optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
+            }
+            break;
+        case 1:
+            for (int i = 0; i < N_OPTIONS; i++) {
+                optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
+            }
+            break;
+        case 3:
+            for (int i = 0; i < N_OPTIONS; i++) {
+                optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
+            }
+            break;
+        case -3:
+            for (int i = 0; i < N_OPTIONS; i++) {
+                optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
+            }
+            break;
+        case 6:
+            for (int i = 0; i < N_OPTIONS; i++) {
+                optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
+            }
+            break;
+        case -6:
+            for (int i = 0; i < N_OPTIONS; i++) {
+                optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
+            }
+            break;
+        case 8:
+            for (int i = 0; i < N_OPTIONS; i++) {
+                optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
+            }
+            break;
+        case -8:
+            for (int i = 0; i < N_OPTIONS; i++) {
+                optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
+            }
+            break;
+        case 10:
+            for (int i = 0; i < N_OPTIONS; i++) {
+                optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
+            }
+            break;
+        case -10:
+            for (int i = 0; i < N_OPTIONS; i++) {
+                optionButtons[i].setColour(TextButton::buttonColourId, Colours::maroon);
+            }
+            break;
+        }
     }
+}
+
+void WhammyPlugAudioProcessorEditor::buttonClicked(Button* sender)
+{
+    auto max_range = 0;
+    pitch_choice.setValue(0.0);
+    
+    for (int j = 0; j < N_OPTIONS; j++)
+        if (&(optionButtons[j]) != sender)
+            optionButtons[j].setColour(TextButton::buttonColourId, Colours::maroon);
+        else if (&(optionButtons[j]) == sender)
+            max_range = getParameters(j); // seleziona il numero massimo di semitoni corrispondenti al tasto cliccato
+
+    sender->setColour(TextButton::buttonColourId, Colours::yellow);
+
+    if (max_range > 0) {
+        pedal_level.setRange(0, max_range);
+        pedal_level.setValue(0.0);
+    }
+    else if (max_range < 0) {
+        auto range = NormalisableRange<double>(max_range, 0.0,
+            [](auto rangeStart, auto rangeEnd, auto normalised)
+            { return jmap(normalised, rangeEnd, rangeStart); },
+            [](auto rangeStart, auto rangeEnd, auto value)
+            { return jmap(value, rangeEnd, rangeStart, 0.0, 1.0); },
+            [](auto rangeStart, auto rangeEnd, auto value)
+            { return value; });
+        pedal_level.setNormalisableRange(range);
+        pedal_level.setValue(0.0);
+    }
+    pedal_level.setNumDecimalPlacesToDisplay(2); 
 }

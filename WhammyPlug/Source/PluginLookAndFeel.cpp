@@ -1,3 +1,4 @@
+
 #include "PluginLookAndFeel.h"
 
 PluginLookAndFeel::PluginLookAndFeel()
@@ -51,7 +52,9 @@ void PluginLookAndFeel::drawRotarySlider(Graphics& g, int x, int y, int width, i
     auto pointerLength = radius;
     auto pointerThickness = 2.0f;
     Rectangle<float> r(-pointerThickness * 0.5f, -radius - 2.0f, pointerThickness, pointerLength);
+    Rectangle<float> ellipse(r.getX() - pointerLength / 8 + 1, r.getY(), pointerLength / 4, pointerLength / 4); // -3
     p.addRectangle(r);
+    p.addEllipse(ellipse);
     p.applyTransform(AffineTransform::rotation(angle).translated(centreX, centreY));
     Rectangle<float> rect(rx, ry, rw, rw);
     p.addPieSegment(rect, rotaryStartAngle, angle, 0.95f);

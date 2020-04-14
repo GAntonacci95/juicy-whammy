@@ -27,8 +27,7 @@ public:
     
     // the next two variables are introduced in order to listen to the sliders' values
     double pitch_value = 0; // takes vertical slider value - controls the actual pitch shifting
-    double knob_value = 12; // takes knob value - controls the choice of the max number of semitones for the pitch shift
-
+    int knob_value = 12; // takes knob value - controls the choice of the max number of semitones for the pitch shift
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
@@ -61,6 +60,9 @@ public:
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+    
+    //==============================================================================
+    void setPitchSemiTones(double pitch);
 
 private:
     SoundTouch* shifterL;
