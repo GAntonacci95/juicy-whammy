@@ -41,7 +41,7 @@ private:
 
     // Sliders to control the number of semitones
     Slider pedal_level;
-    Slider pitch_choice;
+//    Slider pitch_choice;
 
     TextButton slider_container;
     TextButton knob_container;
@@ -58,6 +58,19 @@ private:
         "-2nd", "-3rd", "-4th", "-5th", "-6th", "-7th", "-8th"
     };
 
+//    TextButton knob_container;
+    TextButton boxes_container;
+    
+    TextButton pedal;
+//    TextButton knob;
+    TextButton boxes;
+
+    // semitones
+    static const int N_OPTIONS = 14;
+    static const inline String OPTION_KEYS[] = {
+        "+8th", "+7th", "+6th", "+5th", "+4th", "+3rd", "+2nd",
+        "-2nd", "-3rd", "-4th", "-5th", "-6th", "-7th", "-8th"
+    };
     static const inline int OPTION_VALUES[] = {
         12, 11, 9, 7, 5, 4, 2,
         -2, -4, -5, -7, -9, -11, -12
