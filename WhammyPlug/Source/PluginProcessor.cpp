@@ -116,10 +116,16 @@ void WhammyPlugAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     setPitchSemiTones(0);
 }
 
+double WhammyPlugAudioProcessor::getPitchSemiTones()
+{
+    return currentPitch;
+}
+
 void WhammyPlugAudioProcessor::setPitchSemiTones(double pitch)
 {
-    shifterL->setPitchSemiTones(pitch);
-    shifterR->setPitchSemiTones(pitch);
+    currentPitch = pitch;
+    shifterL->setPitchSemiTones(currentPitch);
+    shifterR->setPitchSemiTones(currentPitch);
 }
 
 void WhammyPlugAudioProcessor::releaseResources()

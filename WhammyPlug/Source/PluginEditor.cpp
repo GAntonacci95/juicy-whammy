@@ -124,14 +124,18 @@ void WhammyPlugAudioProcessorEditor::resized()
 
 void WhammyPlugAudioProcessorEditor::pedalValueChanged(Slider* s)
 {
-    processor.setPitchSemiTones(s->getValue());
+    double tmp = s->getValue();
+    // shifter update only if the slider difference is noticeable
+    // in order not to make too many heavy calls
+    if (abs(tmp - processor.getPitchSemiTones()) >= 1E-3)
+        processor.setPitchSemiTones(tmp);
 }
 
 void WhammyPlugAudioProcessorEditor::pedalMaxValueSetup(int option_index)
 {
     int max_range = OPTION_VALUES[option_index];
     if (max_range > 0)
-        pedal_level.setRange(0, max_range, 0.01);
+        pedal_level.setRange(0, max_range);
     else
     {
         auto range = NormalisableRange<double>(max_range, 0.0,
@@ -141,7 +145,6 @@ void WhammyPlugAudioProcessorEditor::pedalMaxValueSetup(int option_index)
             { return jmap(value, rangeEnd, rangeStart, 0.0, 1.0); },
             [](auto rangeStart, auto rangeEnd, auto value)
             { return value; });
-        // TODO: cent interval here?! =(
         pedal_level.setNormalisableRange(range);
     }
     pedal_level.setValue(0.0);

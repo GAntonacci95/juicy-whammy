@@ -59,9 +59,11 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
     
     //==============================================================================
+    double getPitchSemiTones();
     void setPitchSemiTones(double pitch);
 
 private:
+    double currentPitch;
     SoundTouch* shifterL;
     SoundTouch* shifterR;
 
