@@ -124,12 +124,12 @@ void WhammyPlugAudioProcessor::releaseResources()
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
     
-    chthL->signalThreadShouldExit();
-    chthR->signalThreadShouldExit();
-    if(chthL->threadShouldExit() && chthR->threadShouldExit())
+    if(chthL->stopThread(5) && chthR->stopThread(5))
     {
         delete chthL;
         delete chthR;
+        delete waitTokenL;
+        delete waitTokenR;
     }
 }
 

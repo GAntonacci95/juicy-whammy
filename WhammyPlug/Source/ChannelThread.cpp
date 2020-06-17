@@ -18,6 +18,7 @@ ChannelThread::~ChannelThread()
     shifter->clear();
     shifter->flush();
     delete shifter;
+    delete readyData;
 }
 
 void ChannelThread::run()
