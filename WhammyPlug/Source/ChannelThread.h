@@ -14,7 +14,7 @@ public:
     void run() override;
     void setPitchSemiTones(double currentPitch);
     bool isConfigured();
-    void configure(const float* inptr, int n);
+    void configure(const float* inptr, int num);
     float* getReadyData();
     
 private:
@@ -22,8 +22,8 @@ private:
     SoundTouch* shifter;
     bool isConfiged;
     const float* inPtr;
-    int num;
-    float* tmp;
+    int blockSize;
+    float* readyData;
 };
 
 #endif /* ChannelThread_h */

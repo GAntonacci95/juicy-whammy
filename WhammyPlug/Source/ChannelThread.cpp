@@ -27,8 +27,8 @@ void ChannelThread::run()
         // ! wait for the presence of new data
         this->wait(-1);
         // processing...
-        shifter->putSamples(inPtr, num);
-        shifter->receiveSamples(tmp, num);
+        shifter->putSamples(inPtr, blockSize);
+        shifter->receiveSamples(readyData, blockSize);
         // !! hey listener I'm ready!
         // my end notification
         token->signal();
@@ -45,14 +45,15 @@ bool ChannelThread::isConfigured()
     return isConfiged;
 }
 
-void ChannelThread::configure(const float* inptr, int n)
+void ChannelThread::configure(const float* inptr, int num)
 {
     inPtr = inptr;
-    num = n;
+    blockSize = num;
+    readyData = new float[blockSize];
     isConfiged = true;
 }
 
 float* ChannelThread::getReadyData()
 {
-    return tmp;
+    return readyData;
 }
