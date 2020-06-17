@@ -24,8 +24,14 @@ Libs/Sources/SoundTouch/SoundTouch.vs/Debug
 Libs/Sources/SoundTouch/SoundTouch.vs/x64/Debug
 
 # ...
-Project.logicx
-Dyno Simulation_bip.aif
+*.logicx
+*.aif
+*.wav
+3Tones
+*.mp3
+*.txt
+*.pptx
+*.mp4
 
 # dependencies
 

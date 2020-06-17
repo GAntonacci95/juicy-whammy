@@ -11,9 +11,7 @@
 #pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "SoundTouch.h"
-
-using namespace soundtouch;
+#include "ChannelThread.h"
 
 //==============================================================================
 /**
@@ -64,8 +62,10 @@ public:
 
 private:
     double currentPitch;
-    SoundTouch* shifterL;
-    SoundTouch* shifterR;
+    WaitableEvent* waitTokenL;
+    WaitableEvent* waitTokenR;
+    ChannelThread* chthL;
+    ChannelThread* chthR;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WhammyPlugAudioProcessor)

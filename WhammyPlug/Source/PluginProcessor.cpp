@@ -99,19 +99,10 @@ void WhammyPlugAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
     
-    shifterL = new SoundTouch();
-    shifterR = new SoundTouch();
-    shifterL->setSampleRate((uint)sampleRate);
-    shifterR->setSampleRate((uint)sampleRate);
-
-    // HI latency? -> combo (QUICK = true, AA = false)
-    shifterL->setSetting(SETTING_USE_QUICKSEEK, false);
-    shifterL->setSetting(SETTING_USE_AA_FILTER, true);
-    shifterR->setSetting(SETTING_USE_QUICKSEEK, false);
-    shifterR->setSetting(SETTING_USE_AA_FILTER, true);
-    
-    shifterL->setChannels(1);
-    shifterR->setChannels(1);
+    waitTokenL = new WaitableEvent();
+    waitTokenR = new WaitableEvent();
+    chthL = new ChannelThread("chthL", waitTokenL, (uint)sampleRate);
+    chthR = new ChannelThread("chthR", waitTokenR, (uint)sampleRate);
     
     setPitchSemiTones(0);
 }
@@ -124,8 +115,8 @@ double WhammyPlugAudioProcessor::getPitchSemiTones()
 void WhammyPlugAudioProcessor::setPitchSemiTones(double pitch)
 {
     currentPitch = pitch;
-    shifterL->setPitchSemiTones(currentPitch);
-    shifterR->setPitchSemiTones(currentPitch);
+    chthL->setPitchSemiTones(currentPitch);
+    chthR->setPitchSemiTones(currentPitch);
 }
 
 void WhammyPlugAudioProcessor::releaseResources()
@@ -133,13 +124,13 @@ void WhammyPlugAudioProcessor::releaseResources()
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
     
-    shifterL->clear();
-    shifterL->flush();
-    delete shifterL;
-    
-    shifterR->clear();
-    shifterR->flush();
-    delete shifterR;
+    chthL->signalThreadShouldExit();
+    chthR->signalThreadShouldExit();
+    if(chthL->threadShouldExit() && chthR->threadShouldExit())
+    {
+        delete chthL;
+        delete chthR;
+    }
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -181,12 +172,25 @@ void WhammyPlugAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    // processo memoria interlaced in memoria processed
-    shifterL->putSamples(buffer.getReadPointer(0), buffer.getNumSamples());
-    shifterR->putSamples(buffer.getReadPointer(1), buffer.getNumSamples());
-    
-    shifterL->receiveSamples(buffer.getWritePointer(0), buffer.getNumSamples());
-    shifterR->receiveSamples(buffer.getWritePointer(1), buffer.getNumSamples());
+    if (!chthL->isConfigured() && !chthR->isConfigured())
+    {
+       chthL->configure(buffer.getReadPointer(0), buffer.getNumSamples());
+       chthR->configure(buffer.getReadPointer(1), buffer.getNumSamples());
+       
+       chthL->startThread();
+       chthR->startThread();
+    }
+    // ! notify the presence of new data
+    chthL->notify();
+    chthR->notify();
+
+    // !! wait for both threads to finish
+    waitTokenL->wait();
+    waitTokenR->wait();
+
+    // write to output
+    buffer.addFrom(0, 0, chthL->getReadyData(), buffer.getNumSamples());
+    buffer.addFrom(1, 0, chthR->getReadyData(), buffer.getNumSamples());
 }
 
 //==============================================================================
