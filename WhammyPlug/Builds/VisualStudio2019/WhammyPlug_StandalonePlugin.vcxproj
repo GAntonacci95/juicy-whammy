@@ -82,7 +82,7 @@
       <ProgramDatabaseFile>$(IntDir)\WhammyPlug.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <LargeAddressAware>true</LargeAddressAware>
-      <AdditionalDependencies>WhammyPlug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>"WhammyPlug.lib";%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -128,7 +128,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <LargeAddressAware>true</LargeAddressAware>
-      <AdditionalDependencies>WhammyPlug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>"WhammyPlug.lib";%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>

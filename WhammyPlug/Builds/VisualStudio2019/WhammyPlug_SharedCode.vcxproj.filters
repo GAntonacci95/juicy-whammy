@@ -2295,6 +2295,9 @@
     <ClCompile Include="..\..\Source\PluginLookAndFeel.cpp">
       <Filter>WhammyPlug\Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChannelThread.cpp">
+      <Filter>WhammyPlug\Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\PluginProcessor.h">
@@ -4500,6 +4503,9 @@
       <Filter>JUCE Library Code</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\PluginLookAndFeel.h">
+      <Filter>WhammyPlug\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChannelThread.h">
       <Filter>WhammyPlug\Source</Filter>
     </ClInclude>
   </ItemGroup>

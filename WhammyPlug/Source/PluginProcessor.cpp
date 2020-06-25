@@ -104,7 +104,9 @@ void WhammyPlugAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     chthL = new ChannelThread("chthL", waitTokenL, (uint)sampleRate);
     chthR = new ChannelThread("chthR", waitTokenR, (uint)sampleRate);
     
-    setPitchSemiTones(0);
+    // PROVO A SETTARE IL PITCH INIZIALE DIRETTAMENTE NEL COSTRUTTORE
+    //chthL->setPitchSemiTones(0); // changed from setPitchSemiTones(0);
+    //chthR->setPitchSemiTones(0);
 }
 
 double WhammyPlugAudioProcessor::getPitchSemiTones()
@@ -124,7 +126,7 @@ void WhammyPlugAudioProcessor::releaseResources()
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
     
-    if(chthL->stopThread(5) && chthR->stopThread(5))
+    if(chthL->stopThread(10) && chthR->stopThread(10)) // 5
     {
         delete chthL;
         delete chthR;
@@ -176,7 +178,7 @@ void WhammyPlugAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
     {
        chthL->configure(buffer.getReadPointer(0), buffer.getNumSamples());
        chthR->configure(buffer.getReadPointer(1), buffer.getNumSamples());
-       
+
        chthL->startThread();
        chthR->startThread();
     }
@@ -189,8 +191,9 @@ void WhammyPlugAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
     waitTokenR->wait();
 
     // write to output
-    buffer.addFrom(0, 0, chthL->getReadyData(), buffer.getNumSamples());
-    buffer.addFrom(1, 0, chthR->getReadyData(), buffer.getNumSamples());
+    buffer.copyFrom(0, 0, chthL->getReadyData(), buffer.getNumSamples());
+    buffer.copyFrom(1, 0, chthR->getReadyData(), buffer.getNumSamples());
+
 }
 
 //==============================================================================

@@ -16,7 +16,7 @@ public:
     bool isConfigured();
     void configure(const float* inptr, int num);
     float* getReadyData();
-    
+
 private:
     WaitableEvent* token;
     SoundTouch* shifter;

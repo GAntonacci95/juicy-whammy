@@ -11,6 +11,8 @@ ChannelThread::ChannelThread(const String& threadName, WaitableEvent* waitToken,
     shifter->setSetting(SETTING_USE_AA_FILTER, true);
     shifter->setSampleRate(sampleRate);
     shifter->setChannels(1);
+
+    shifter->setPitchSemiTones(0); // ADDED NOW
 }
 
 ChannelThread::~ChannelThread()
