@@ -3,13 +3,16 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "SoundTouch.h"
+#include "../modules/juce_dsp/juce_dsp.h"
+#include "Window.h"
 
 using namespace soundtouch;
+using namespace dsp;
 
 class ChannelThread : public Thread
 {
 public:
-    ChannelThread(const String& threadName, WaitableEvent* waitToken, uint sampleRate);
+    ChannelThread(const String& threadName, WaitableEvent* waitToken, uint sampleRate, size_t samplePerBlock);
     ~ChannelThread();
     void run() override;
     void setPitchSemiTones(double currentPitch);
@@ -24,6 +27,12 @@ private:
     const float* inPtr;
     int blockSize;
     float* readyData;
+    ////////////////////////////////////////////////
+    LagrangeInterpolator interpolator;
+    double speedRatio = 3;
+    Window* window;
+    float* windowSamples;
+    float* inPtrWindowed;
 };
 
 #endif /* ChannelThread_h */

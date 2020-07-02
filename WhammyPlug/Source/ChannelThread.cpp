@@ -1,7 +1,9 @@
 #include "ChannelThread.h"
 
-ChannelThread::ChannelThread(const String& threadName, WaitableEvent* waitToken, uint sampleRate) : Thread(threadName)
+ChannelThread::ChannelThread(const String& threadName, WaitableEvent* waitToken, uint sampleRate, size_t samplePerBlock) 
+    : Thread(threadName)
 {
+
     token = waitToken;
     shifter = new SoundTouch();
     isConfiged = false;
@@ -12,7 +14,11 @@ ChannelThread::ChannelThread(const String& threadName, WaitableEvent* waitToken,
     shifter->setSampleRate(sampleRate);
     shifter->setChannels(1);
 
-    shifter->setPitchSemiTones(0); // ADDED NOW
+    shifter->setPitchSemiTones(0);
+
+    window = new Window();
+    /*windowSamples = new float[samplePerBlock];
+    window->hamming(windowSamples, samplePerBlock);*/
 }
 
 ChannelThread::~ChannelThread()
@@ -21,6 +27,9 @@ ChannelThread::~ChannelThread()
     shifter->flush();
     delete shifter;
     delete readyData;
+    ///////////////////////////////////////////////
+    delete inPtrWindowed;
+    delete windowSamples;
 }
 
 void ChannelThread::run()
@@ -31,6 +40,11 @@ void ChannelThread::run()
         this->wait(-1);
         // processing...
         shifter->putSamples(inPtr, blockSize);
+        // WINDOWING DI INPTR CON FINESTRA DI HAMMING
+        memcpy(inPtrWindowed, inPtr, sizeof(float)*blockSize); // copio inPtr in inPtrWindowed
+        window->applyWindow(inPtrWindowed, windowSamples, blockSize);
+        // LAGRANGE INTERPOLATION SU SEGNALE A CUI E APPLICATA LA WINDOW
+        interpolator.LagrangeInterpolator::process(speedRatio, inPtrWindowed, readyData, speedRatio*blockSize); // 512
         shifter->receiveSamples(readyData, blockSize);
         // !! hey listener I'm ready!
         // my end notification
@@ -54,6 +68,10 @@ void ChannelThread::configure(const float* inptr, int num)
     blockSize = num;
     readyData = new float[blockSize];
     isConfiged = true;
+    ////////////////////////////////////////////////////////////////
+    windowSamples = new float[blockSize];
+    window->hamming(windowSamples, blockSize);
+    inPtrWindowed = new float[blockSize];
 }
 
 float* ChannelThread::getReadyData()

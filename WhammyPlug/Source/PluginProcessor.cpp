@@ -14,7 +14,7 @@
 //==============================================================================
 WhammyPlugAudioProcessor::WhammyPlugAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
-    : AudioProcessor (BusesProperties()
+      :AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
                       #if ! JucePlugin_IsSynth
                        .withInput  ("Input",  AudioChannelSet::stereo(), true)
@@ -24,7 +24,6 @@ WhammyPlugAudioProcessor::WhammyPlugAudioProcessor()
                        )
 #endif
 {
-    
 }
 
 WhammyPlugAudioProcessor::~WhammyPlugAudioProcessor()
@@ -101,12 +100,8 @@ void WhammyPlugAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     
     waitTokenL = new WaitableEvent();
     waitTokenR = new WaitableEvent();
-    chthL = new ChannelThread("chthL", waitTokenL, (uint)sampleRate);
-    chthR = new ChannelThread("chthR", waitTokenR, (uint)sampleRate);
-    
-    // PROVO A SETTARE IL PITCH INIZIALE DIRETTAMENTE NEL COSTRUTTORE
-    //chthL->setPitchSemiTones(0); // changed from setPitchSemiTones(0);
-    //chthR->setPitchSemiTones(0);
+    chthL = new ChannelThread("chthL", waitTokenL, (uint)sampleRate, samplesPerBlock);
+    chthR = new ChannelThread("chthR", waitTokenR, (uint)sampleRate, samplesPerBlock);
 }
 
 double WhammyPlugAudioProcessor::getPitchSemiTones()
@@ -193,7 +188,6 @@ void WhammyPlugAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
     // write to output
     buffer.copyFrom(0, 0, chthL->getReadyData(), buffer.getNumSamples());
     buffer.copyFrom(1, 0, chthR->getReadyData(), buffer.getNumSamples());
-
 }
 
 //==============================================================================

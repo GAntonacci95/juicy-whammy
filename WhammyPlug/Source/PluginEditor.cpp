@@ -110,11 +110,11 @@ void WhammyPlugAudioProcessorEditor::resized()
 
     // semitones boxes are inside the boxes container area
     auto boxes_container_area = boxes_area.removeFromLeft(boxes_area.getWidth());
-    auto boxes_container_margin = boxes_container_area.getWidth() / 30; // 25
+    auto boxes_container_margin = boxes_container_area.getWidth() / 30;
 
     boxes_container.setBounds(boxes_container_area.removeFromTop(50));
 
-    auto boxes_height = boxes_container_area.getHeight() / 15; // 22
+    auto boxes_height = boxes_container_area.getHeight() / 15;
 
     for (int i = 0; i < N_OPTIONS; i++)
         optionButtons[i]
