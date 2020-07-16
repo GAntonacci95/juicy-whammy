@@ -142,6 +142,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\ChannelThread.cpp" />
+    <ClCompile Include="..\..\Source\CustomRegister.cpp" />
     <ClCompile Include="..\..\Source\PluginLookAndFeel.cpp" />
     <ClCompile Include="..\..\Source\PluginProcessor.cpp" />
     <ClCompile Include="..\..\Source\PluginEditor.cpp" />
@@ -1971,10 +1972,12 @@
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_gui_basics.cpp" />
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_gui_extra.cpp" />
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_opengl.cpp" />
+    <ClCompile Include="..\..\Source\SISOShiftRegister.cpp" />
     <ClCompile Include="..\..\Source\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\ChannelThread.h" />
+    <ClInclude Include="..\..\Source\CustomRegister.h" />
     <ClInclude Include="..\..\Source\PluginLookAndFeel.h" />
     <ClInclude Include="..\..\Source\PluginProcessor.h" />
     <ClInclude Include="..\..\Source\PluginEditor.h" />
@@ -2710,6 +2713,7 @@
     <ClInclude Include="..\..\..\..\..\..\..\..\JUCE\modules\juce_opengl\juce_opengl.h" />
     <ClInclude Include="..\..\JuceLibraryCode\AppConfig.h" />
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h" />
+    <ClInclude Include="..\..\Source\SISOShiftRegister.h" />
     <ClInclude Include="..\..\Source\Window.h" />
   </ItemGroup>
   <ItemGroup>

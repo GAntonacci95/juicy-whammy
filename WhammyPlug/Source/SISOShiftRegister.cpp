@@ -66,6 +66,6 @@ void SISOShiftRegister::updateHorseBlock()
     // TODO: CHECK - clearQuick (in caso correggere anche altrove NEI FILEs) e correttezza riferimenti
     horseBlock.clearQuick();
     // TODO: CORREGGERE QUI SOTTOOOOOOOOOOOOOOOOOOOOOOO
-//    horseBlock.addArray(&(prevBlock[hopSize]), overlapSize);
+    horseBlock.addArray(&(prevBlock.getReference(hopSize)), overlapSize);
     horseBlock.addArray(currBlock, hopSize);
 }

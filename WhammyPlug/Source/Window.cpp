@@ -1,8 +1,9 @@
 #include "Window.h"
 
-Window::Window(const String& name, int num)
+Window::Window(int num)
 {
     this->blockSize = num;
+    this->hopRate = 1;
     this->samples = new float[blockSize];
 }
 
@@ -38,7 +39,7 @@ float* Window::getSamples()
     return this->samples;
 }
 
-// ------------------------------ UTILIA' STATICHE ------------------------------
+// ------------------------------ UTILITA' STATICHE ------------------------------
 void Window::hamming(Window* outWindow)
 {
     outWindow->setHopRate(0.5);
@@ -60,9 +61,10 @@ void Window::applyWindow(Array<float> data, Window* window)
 	}
 }
 
-void Window::OLA(Array<float> first, Array<float> second, int overlapSize, Array<float> output)
+Array<float> Window::OLA(Array<float> first, Array<float> second, int overlapSize)
 {
-    output.clearQuick();
+    Array<float> output;
+    //output.clearQuick();
     output.resize(first.size() + second.size() - overlapSize);
     output.fill(0);
     
@@ -76,4 +78,6 @@ void Window::OLA(Array<float> first, Array<float> second, int overlapSize, Array
             output.add(first.getReference(i) +
                         second.getReference(i - first.size()));
     }
+
+    return output;
 }

@@ -100,9 +100,10 @@ void WhammyPlugAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     
     waitTokenL = new WaitableEvent();
     waitTokenR = new WaitableEvent();
-    window = new Window("Hamming", samplesPerBlock);
+    window = new Window(samplesPerBlock);
+    Window::hamming(window);
     chthL = new ChannelThread("chthL", waitTokenL, (uint)sampleRate, window);
-//    chthR = new ChannelThread("chthR", waitTokenR, (uint)sampleRate, *window);
+    chthR = new ChannelThread("chthR", waitTokenR, (uint)sampleRate, window);
 }
 
 double WhammyPlugAudioProcessor::getPitchSemiTones()

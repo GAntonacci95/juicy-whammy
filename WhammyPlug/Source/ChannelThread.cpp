@@ -23,7 +23,7 @@ void ChannelThread::configure(const float* inPtr)
 {
     this->currRef = inPtr;
     
-    readyData.resize(2 * reg->getWindow()->getBlockSize() - reg->getWindow()->getOverlapSize());
+    readyData.resize(reg->getWindow()->getHopSize() + reg->getWindow()->getBlockSize());
     readyData.fill(0);
     
     isConfiged = true;
@@ -83,13 +83,12 @@ void ChannelThread::run()
                                 currWinShift.size());
         
         // merge di horseWinShift e currWinShift (OLA, vettore eccedente)
-        Window::OLA(horseWinShift, currWinShift,
-                    reg->getWindow()->getOverlapSize(),
-                    readyDataPreInt);
+        readyDataPreInt = Window::OLA(horseWinShift, currWinShift,
+                                      reg->getWindow()->getOverlapSize());
         
         // applicazione dell'interpolazione al vettore eccedente qui sopra
         interpolator->process(speedRatio, readyDataPreInt.data(),
-                             readyData.data(), readyData.size());
+                              readyData.data(), readyData.size());
         
         // restituzione del vettore eccedente interpolato:
         // !! hey listener I'm ready!

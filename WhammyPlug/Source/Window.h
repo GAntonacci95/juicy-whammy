@@ -6,7 +6,7 @@
 class Window
 {
 public:
-	Window(const String& winName, int num);
+	Window(int num);
 	~Window();
     int getBlockSize();
     double getHopRate();
@@ -18,7 +18,7 @@ public:
     
     static void hamming(Window* outWindow);
     static void applyWindow(Array<float> data, Window* window);
-    static void OLA(Array<float> first, Array<float> second, int overlapSize, Array<float> output);
+    static Array<float> OLA(Array<float> first, Array<float> second, int overlapSize);
 
 private:
     int blockSize;
