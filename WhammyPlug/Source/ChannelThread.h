@@ -18,24 +18,21 @@ public:
     void setPitchSemiTones(double currentPitch);
     bool isConfigured();
     void configure(const float* inPtr);
-    Array<float> getReadyData();
+    LilArray* getReadyData();
 
 private:
     const float* currRef;
     WaitableEvent* token;
     SoundTouch* shifter;
     CustomRegister* reg;
-    
-    Array<float> horseWin;
-    Array<float> horseWinShift;
-    Array<float> currWin;
-    Array<float> currWinShift;
-    Array<float> readyDataPreInt;
-    Array<float> readyData;
-    bool isConfiged;
-    
     LagrangeInterpolator* interpolator;
-    const double speedRatio = 3.0;
+    const double speedRatio = 3;
+    
+    LilArray* horseWinShift;
+    LilArray* currWinShift;
+    LilArray* readyDataPreInt;
+    LilArray* readyData;
+    bool isConfiged;
 };
 
 #endif /* ChannelThread_h */

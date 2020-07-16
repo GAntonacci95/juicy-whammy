@@ -4,6 +4,9 @@ CustomRegister::CustomRegister(Window* window)
     : SISOShiftRegister(window->getBlockSize(), window->getOverlapSize(), window->getHopSize())
 {
     this->window = window;
+    this->prevWin = new LilArray(window->getBlockSize());
+    this->horseWin = new LilArray(window->getBlockSize());
+    this->currWin = new LilArray(window->getBlockSize());
 }
 
 CustomRegister::~CustomRegister() { }
@@ -12,22 +15,22 @@ Window* CustomRegister::getWindow()
 {
     return this->window;
 }
-Array<float> CustomRegister::windowing(Array<float> which)
+
+LilArray* CustomRegister::getPreviousWin()
 {
-    Array<float> tmp;
-    tmp.addArray(which);
-    Window::applyWindow(tmp, window);
-    return tmp;
+    prevWin->setData(getPrevious());
+    Window::applyWindow(prevWin, window);
+    return this->prevWin;
 }
-Array<float> CustomRegister::getPreviousWin()
+LilArray* CustomRegister::getHorseWin()
 {
-    return windowing(getPrevious());
+    horseWin->setData(getHorse());
+    Window::applyWindow(horseWin, window);
+    return this->horseWin;
 }
-Array<float> CustomRegister::getHorseWin()
+LilArray* CustomRegister::getCurrentWin()
 {
-    return windowing(getHorse());
-}
-Array<float> CustomRegister::getCurrentWin()
-{
-    return windowing(getCurrent());
+    currWin->setData(getCurrent());
+    Window::applyWindow(currWin, window);
+    return this->currWin;
 }

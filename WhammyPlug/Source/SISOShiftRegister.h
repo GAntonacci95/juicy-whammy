@@ -2,31 +2,33 @@
 #define SISOShiftRegister_h
 
 #include <JuceHeader.h>
-#include "Window.h"
+#include "LilArray.h"
 
 // TODO: Valutare attentamente l'uso dei riferimenti, ricreati o const?!
 class SISOShiftRegister
 {
 public:
-    SISOShiftRegister(int blockSize, int overlapSize = 0, int hopSize = 0);
+    SISOShiftRegister(int blockSize, int hopSize, int overlapSize);
     ~SISOShiftRegister();
-    Array<float> getPrevious();
-    Array<float> getHorse();
-    Array<float> getCurrent();
+    LilArray* getPrevious();
+    LilArray* getHorse();
+    LilArray* getCurrent();
     void leftShift(const float* inPtr);
+    void leftShift(float* inPtr);
     
 private:
     int blockSize;
-    int overlapSize;
     int hopSize;
+    int overlapSize;
     
-    Array<float> prevBlock;
+    LilArray* prevBlock;
     // horse cache a cavallo
-    Array<float> horseBlock;
-    Array<float> currBlock;
+    LilArray* horseBlock;
+    LilArray* currBlock;
     
     void updatePrevBlock();
     void updateCurrBlock(const float* inPtr);
+    void updateCurrBlock(float* inPtr);
     void updateHorseBlock();
 };
 

@@ -1,40 +1,35 @@
 #include "SISOShiftRegister.h"
 
-SISOShiftRegister::SISOShiftRegister(int blockSize, int overlapSize, int hopSize)
+SISOShiftRegister::SISOShiftRegister(int blockSize, int hopSize, int overlapSize)
 {
     this->blockSize = blockSize;
-    this->overlapSize = overlapSize;
     this->hopSize = hopSize;
+    this->overlapSize = overlapSize;
     
-    // inizializzo i 3 blocchi tutti a 0
-    prevBlock.resize(blockSize);
-    prevBlock.fill(0);
-    
-    horseBlock.resize(overlapSize + hopSize);
-    horseBlock.fill(0);
-    
-    currBlock.addArray(prevBlock);
+    this->prevBlock = new LilArray(blockSize);
+    this->horseBlock = new LilArray(blockSize);
+    this->currBlock = new LilArray(blockSize);
 }
 
 SISOShiftRegister::~SISOShiftRegister()
 {
-    prevBlock.clear();
-    horseBlock.clear();
-    currBlock.clear();
-    delete &prevBlock;
-    delete &horseBlock;
-    delete &currBlock;
+    prevBlock->clear();
+    horseBlock->clear();
+    currBlock->clear();
+    delete prevBlock;
+    delete horseBlock;
+    delete currBlock;
 }
 
-Array<float> SISOShiftRegister::getPrevious()
+LilArray* SISOShiftRegister::getPrevious()
 {
     return this->prevBlock;
 }
-Array<float> SISOShiftRegister::getHorse()
+LilArray* SISOShiftRegister::getHorse()
 {
     return this->horseBlock;
 }
-Array<float> SISOShiftRegister::getCurrent()
+LilArray* SISOShiftRegister::getCurrent()
 {
     return this->currBlock;
 }
@@ -48,24 +43,32 @@ void SISOShiftRegister::leftShift(const float* inPtr)
     // aggiorno horseBlock
     updateHorseBlock();
 }
+void SISOShiftRegister::leftShift(float* inPtr)
+{
+    // copio currBlock in prevBlock
+    updatePrevBlock();
+    // copio currRef in currBlock
+    updateCurrBlock(inPtr);
+    // aggiorno horseBlock
+    updateHorseBlock();
+}
 
 void SISOShiftRegister::updatePrevBlock()
 {
-    prevBlock.clearQuick();
-    prevBlock.addArray(currBlock, currBlock.size());
+    prevBlock->setData(currBlock);
 }
 
 void SISOShiftRegister::updateCurrBlock(const float* inPtr)
 {
-    currBlock.addArray(inPtr, currBlock.size());
-    currBlock.removeRange(0, currBlock.size() / 2);
+    currBlock->setData(inPtr);
+}
+void SISOShiftRegister::updateCurrBlock(float* inPtr)
+{
+    currBlock->setData(inPtr);
 }
 
 void SISOShiftRegister::updateHorseBlock()
 {
-    // TODO: CHECK - clearQuick (in caso correggere anche altrove NEI FILEs) e correttezza riferimenti
-    horseBlock.clearQuick();
-    // TODO: CORREGGERE QUI SOTTOOOOOOOOOOOOOOOOOOOOOOO
-    horseBlock.addArray(&(prevBlock.getReference(hopSize)), overlapSize);
-    horseBlock.addArray(currBlock, hopSize);
+    horseBlock->setData(prevBlock, hopSize, overlapSize);
+    horseBlock->setData(currBlock, 0, hopSize);
 }

@@ -1,9 +1,9 @@
 #include "Window.h"
 
-Window::Window(int num)
+Window::Window(int size, double hopRate)
 {
-    this->blockSize = num;
-    this->hopRate = 1;
+    this->blockSize = size;
+    this->hopRate = hopRate;
     this->samples = new float[blockSize];
 }
 
@@ -16,11 +16,6 @@ int Window::getBlockSize()
 double Window::getHopRate()
 {
     return this->hopRate;
-}
-void Window::setHopRate(double rate)
-{
-    // check [0,1] ...
-    this->hopRate = rate;
 }
 double Window::getOverlapRate()
 {
@@ -40,9 +35,9 @@ float* Window::getSamples()
 }
 
 // ------------------------------ UTILITA' STATICHE ------------------------------
-void Window::hamming(Window* outWindow)
+Window* Window::hamming(int size)
 {
-    outWindow->setHopRate(0.5);
+    Window* outWindow = new Window(size, 0.5);
 	double phase = 0;
 	double delta = 2 * juce::MathConstants<float>::pi / (double)outWindow->getBlockSize();
 
@@ -51,33 +46,27 @@ void Window::hamming(Window* outWindow)
 		outWindow->getSamples()[i] = (float)(0.54 - 0.46 * cos(phase));
 		phase += delta;
 	}
+    return outWindow;
 }
 
-void Window::applyWindow(Array<float> data, Window* window)
+void Window::applyWindow(LilArray* data, Window* window)
 {
-	for (int i = 0; i < data.size(); ++i)
+	for (int i = 0; i < data->getSize(); ++i)
 	{
-        data.getReference(i) *= window->getSamples()[i];
+        data->setDatum(i, data->getDatum(i) * window->getSamples()[i]);
 	}
 }
 
-Array<float> Window::OLA(Array<float> first, Array<float> second, int overlapSize)
+void Window::OLA(LilArray* first, LilArray* second, int overlapSize, LilArray* output)
 {
-    Array<float> output;
-    //output.clearQuick();
-    output.resize(first.size() + second.size() - overlapSize);
-    output.fill(0);
-    
-    for (int i = 0; i < output.size(); i++)
+    for (int i = 0; i < output->getSize(); i++)
     {
-        if (i < first.size() - overlapSize)
-            output.add(first.getReference(i));
-        else if (i >= first.size())
-            output.add(second.getReference(i - first.size()));
+        if (i < first->getSize() - overlapSize)
+            output[i] = first->getDatum(i);
+        else if (i >= first->getSize())
+            output[i] = second->getDatum(i - first->getSize());
         else
-            output.add(first.getReference(i) +
-                        second.getReference(i - first.size()));
+            output[i] = first->getDatum(i) +
+                second->getDatum(i - first->getSize());
     }
-
-    return output;
 }

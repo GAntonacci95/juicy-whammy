@@ -23,8 +23,11 @@ void ChannelThread::configure(const float* inPtr)
 {
     this->currRef = inPtr;
     
-    readyData.resize(reg->getWindow()->getHopSize() + reg->getWindow()->getBlockSize());
-    readyData.fill(0);
+    horseWinShift = new LilArray(reg->getWindow()->getBlockSize());
+    currWinShift = new LilArray(reg->getWindow()->getBlockSize());
+    
+    readyDataPreInt = new LilArray(reg->getWindow()->getHopSize() + reg->getWindow()->getBlockSize());
+    readyData = new LilArray(readyDataPreInt->getSize());
     
     isConfiged = true;
 }
@@ -34,10 +37,17 @@ ChannelThread::~ChannelThread()
     shifter->clear();
     shifter->flush();
     delete shifter;
+    delete reg;
     delete interpolator;
     
-    readyData.clear();
-    delete &readyData;
+    horseWinShift->clear();
+    currWinShift->clear();
+    readyDataPreInt->clear();
+    readyData->clear();
+    delete horseWinShift;
+    delete currWinShift;
+    delete readyDataPreInt;
+    delete readyData;
 }
 
 void ChannelThread::setPitchSemiTones(double currentPitch)
@@ -50,7 +60,7 @@ bool ChannelThread::isConfigured()
     return isConfiged;
 }
 
-Array<float> ChannelThread::getReadyData()
+LilArray* ChannelThread::getReadyData()
 {
     return readyData;
 }
@@ -67,28 +77,24 @@ void ChannelThread::run()
         
         // pitch-shifting
         // di frame a cavallo (del precedente col corrente)
-        horseWin = reg->getHorseWin();
-        horseWinShift.clearQuick();
-        horseWinShift.addArray(horseWin);
-        currWin = reg->getCurrentWin();
-        currWinShift.clearQuick();
-        currWinShift.addArray(currWin);
+        LilArray* horseWin = reg->getHorseWin();
+        horseWinShift->setData(horseWin);
+        LilArray* currWin = reg->getCurrentWin();
+        currWinShift->setData(currWin);
         
-        shifter->putSamples(horseWin.data(), horseWin.size());
-        shifter->receiveSamples(horseWinShift.data(),
-                                horseWinShift.size());
+        shifter->putSamples(horseWin->getData(), horseWin->getSize());
+        shifter->receiveSamples(horseWinShift->getData(), horseWinShift->getSize());
         // e di frame corrente
-        shifter->putSamples(currWin.data(), currWin.size());
-        shifter->receiveSamples(currWinShift.data(),
-                                currWinShift.size());
+        shifter->putSamples(currWin->getData(), currWin->getSize());
+        shifter->receiveSamples(currWinShift->getData(), currWinShift->getSize());
         
         // merge di horseWinShift e currWinShift (OLA, vettore eccedente)
-        readyDataPreInt = Window::OLA(horseWinShift, currWinShift,
-                                      reg->getWindow()->getOverlapSize());
+        Window::OLA(horseWinShift, currWinShift,
+                    reg->getWindow()->getOverlapSize(), readyDataPreInt);
         
         // applicazione dell'interpolazione al vettore eccedente qui sopra
-        interpolator->process(speedRatio, readyDataPreInt.data(),
-                              readyData.data(), readyData.size());
+        interpolator->process(speedRatio, readyDataPreInt->getData(),
+                              readyData->getData(), readyData->getSize());
         
         // restituzione del vettore eccedente interpolato:
         // !! hey listener I'm ready!

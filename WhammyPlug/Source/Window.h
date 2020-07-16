@@ -1,26 +1,26 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "LilArray.h"
 
 // TODO: Valutare attentamente l'uso dei riferimenti, ricreati o const?!
 class Window
 {
 public:
-	Window(int num);
 	~Window();
     int getBlockSize();
     double getHopRate();
-    void setHopRate(double rate);
     double getOverlapRate();
     int getHopSize();
     int getOverlapSize();
     float* getSamples();
     
-    static void hamming(Window* outWindow);
-    static void applyWindow(Array<float> data, Window* window);
-    static Array<float> OLA(Array<float> first, Array<float> second, int overlapSize);
+    static Window* hamming(int size);
+    static void applyWindow(LilArray* data, Window* window);
+    static void OLA(LilArray* first, LilArray* second, int overlapSize, LilArray* output);
 
 private:
+    Window(int size, double hopRate);
     int blockSize;
     double hopRate;
     

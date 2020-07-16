@@ -11,25 +11,16 @@ public:
     CustomRegister(Window* window);
     ~CustomRegister();
     Window* getWindow();
-    Array<float> getPreviousWin();
-    Array<float> getHorseWin();
-    Array<float> getCurrentWin();
+    LilArray* getPreviousWin();
+    LilArray* getHorseWin();
+    LilArray* getCurrentWin();
     
 private:
     Window* window;
     
-    Array<float> windowing(Array<float> which);
-
-//    // frame duplicati: cache cui si applica la finestra
-//    Array<float>* prevDup;
-//    Array<float>* horseDup;
-//    Array<float>* currDup;
-//
-//    void updatePrevDup();
-//    void updateCurrDup();
-//    void updateHorseDup();
-//    void updateAllDups();
-//    void windowAllDups();
+    LilArray* prevWin;
+    LilArray* horseWin;
+    LilArray* currWin;
 };
 
 #endif /* CustomRegister_h */

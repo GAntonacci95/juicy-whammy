@@ -100,8 +100,7 @@ void WhammyPlugAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     
     waitTokenL = new WaitableEvent();
     waitTokenR = new WaitableEvent();
-    window = new Window(samplesPerBlock);
-    Window::hamming(window);
+    window = Window::hamming(samplesPerBlock);
     chthL = new ChannelThread("chthL", waitTokenL, (uint)sampleRate, window);
     chthR = new ChannelThread("chthR", waitTokenR, (uint)sampleRate, window);
 }
@@ -191,11 +190,11 @@ void WhammyPlugAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
     // write to output
     // overflow in fade-out, OLA al frame successivo
     buffer.addFrom(0, 0,
-                   chthL->getReadyData().data(),
-                   chthL->getReadyData().size());
+                   chthL->getReadyData()->getData(),
+                   chthL->getReadyData()->getSize());
     buffer.addFrom(1, 0,
-                   chthR->getReadyData().data(),
-                   chthR->getReadyData().size());
+                   chthR->getReadyData()->getData(),
+                   chthR->getReadyData()->getSize());
 }
 
 //==============================================================================
