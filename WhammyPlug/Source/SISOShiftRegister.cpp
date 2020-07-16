@@ -1,61 +1,45 @@
-#include "CustomSISOShiftRegister.h"
+#include "SISOShiftRegister.h"
 
-CustomSISOShiftRegister::CustomSISOShiftRegister(Window* window)
+SISOShiftRegister::SISOShiftRegister(int blockSize, int overlapSize, int hopSize)
 {
-    this->window = window;
+    this->blockSize = blockSize;
+    this->overlapSize = overlapSize;
+    this->hopSize = hopSize;
     
     // inizializzo i 3 blocchi tutti a 0
-    prevBlock = new Array<float>();
-    prevBlock->resize(window->getBlockSize());
-    prevBlock->fill(0);
+    prevBlock.resize(blockSize);
+    prevBlock.fill(0);
     
-    horseBlock = new Array<float>();
-    horseBlock->resize(window->getOverlapSize() + window->getHopSize());
-    horseBlock->fill(0);
+    horseBlock.resize(overlapSize + hopSize);
+    horseBlock.fill(0);
     
-    currBlock = new Array<float>();
-    currBlock->addArray(prevBlock);
+    currBlock.addArray(prevBlock);
 }
 
-CustomSISOShiftRegister::~CustomSISOShiftRegister()
+SISOShiftRegister::~SISOShiftRegister()
 {
-    prevBlock->clear();
-    horseBlock->clear();
-    currBlock->clear();
-    delete prevBlock;
-    delete horseBlock;
-    delete currBlock;
+    prevBlock.clear();
+    horseBlock.clear();
+    currBlock.clear();
+    delete &prevBlock;
+    delete &horseBlock;
+    delete &currBlock;
 }
 
-Array<float>* CustomSISOShiftRegister::getPrevious()
+Array<float> SISOShiftRegister::getPrevious()
 {
     return this->prevBlock;
 }
-Array<float>* CustomSISOShiftRegister::getWin(Array<float>* which)
+Array<float> SISOShiftRegister::getHorse()
 {
-    Array<float>* tmp = new Array<float>();
-    tmp->addArray(which);
-    Window::applyWindow(tmp, window);
-    return tmp;
+    return this->horseBlock;
 }
-Array<float>* CustomSISOShiftRegister::getWinPrevious()
-{
-    return getWin(prevBlock);
-}
-Array<float>* CustomSISOShiftRegister::getWinHorse()
-{
-    return getWin(horseBlock);
-}
-Array<float>* CustomSISOShiftRegister::getCurrent()
+Array<float> SISOShiftRegister::getCurrent()
 {
     return this->currBlock;
 }
-Array<float>* CustomSISOShiftRegister::getWinCurrent()
-{
-    return getWin(currBlock);
-}
 
-void CustomSISOShiftRegister::leftShift(const float* inPtr)
+void SISOShiftRegister::leftShift(const float* inPtr)
 {
     // copio currBlock in prevBlock
     updatePrevBlock();
@@ -65,22 +49,23 @@ void CustomSISOShiftRegister::leftShift(const float* inPtr)
     updateHorseBlock();
 }
 
-void CustomSISOShiftRegister::updatePrevBlock()
+void SISOShiftRegister::updatePrevBlock()
 {
-    prevBlock->clearQuick();
-    prevBlock->addArray(currBlock, currBlock->size());
+    prevBlock.clearQuick();
+    prevBlock.addArray(currBlock, currBlock.size());
 }
 
-void CustomSISOShiftRegister::updateCurrBlock(const float* inPtr)
+void SISOShiftRegister::updateCurrBlock(const float* inPtr)
 {
-    currBlock->addArray(inPtr, currBlock->size());
-    currBlock->removeRange(0, currBlock->size() / 2);
+    currBlock.addArray(inPtr, currBlock.size());
+    currBlock.removeRange(0, currBlock.size() / 2);
 }
 
-void CustomSISOShiftRegister::updateHorseBlock()
+void SISOShiftRegister::updateHorseBlock()
 {
     // TODO: CHECK - clearQuick (in caso correggere anche altrove NEI FILEs) e correttezza riferimenti
-    horseBlock->clearQuick();
-    horseBlock->addArray(&(prevBlock[window->getHopSize()]), window->getOverlapSize());
-    horseBlock->addArray(currBlock, window->getHopSize());
+    horseBlock.clearQuick();
+    // TODO: CORREGGERE QUI SOTTOOOOOOOOOOOOOOOOOOOOOOO
+//    horseBlock.addArray(&(prevBlock[hopSize]), overlapSize);
+    horseBlock.addArray(currBlock, hopSize);
 }

@@ -1,57 +1,33 @@
-#include "CustomMIMOShiftRegister.h"
+#include "CustomRegister.h"
 
-CustomMIMOShiftRegister::CustomMIMOShiftRegister(const float* inPtr, Window* window)
+CustomRegister::CustomRegister(Window* window)
+    : SISOShiftRegister(window->getBlockSize(), window->getOverlapSize(), window->getHopSize())
 {
-    this->currRef = inPtr;
     this->window = window;
-    
-    // inizializzo i (3 blocchi + 3 duplicati) tutti a 0
-    
-    blocks = new SISOShiftRegister(window->getBlockSize(), window->getOverlapSize(), window->getHopSize());
-//    dups = new SISOShiftRegister(window);
-//    shifts = new SISOShiftRegister(window->getBlockSize(), window->getOverlapSize(), window->getHopSize());
 }
 
-CustomMIMOShiftRegister::~CustomMIMOShiftRegister()
-{
-    delete blocks;
-//    delete dups;
-//    delete shifts;
-}
+CustomRegister::~CustomRegister() { }
 
-void CustomMIMOShiftRegister::doShift()
+Window* CustomRegister::getWindow()
 {
-    blocks->leftShift(currRef);
-//    dups->doShift(currRef);
-    // aggiorno AllDups e gli applico la finestra
-    updateAllDups();
-    windowAllDups();
+    return this->window;
 }
-
-void CustomMIMOShiftRegister::updatePrevDup()
+Array<float> CustomRegister::windowing(Array<float> which)
 {
-    prevDup->clearQuick();
-    prevDup->addArray(prevBlock, prevBlock->size());
+    Array<float> tmp;
+    tmp.addArray(which);
+    Window::applyWindow(tmp, window);
+    return tmp;
 }
-void CustomMIMOShiftRegister::updateCurrDup()
+Array<float> CustomRegister::getPreviousWin()
 {
-    currDup->clearQuick();
-    currDup->addArray(currBlock, currBlock->size());
+    return windowing(getPrevious());
 }
-void CustomMIMOShiftRegister::updateHorseDup()
+Array<float> CustomRegister::getHorseWin()
 {
-    horseDup->clearQuick();
-    horseDup->addArray(horseBlock, horseBlock->size());
+    return windowing(getHorse());
 }
-void CustomMIMOShiftRegister::updateAllDups()
+Array<float> CustomRegister::getCurrentWin()
 {
-    updatePrevDup();
-    updateCurrDup();
-    updateHorseDup();
-}
-void CustomMIMOShiftRegister::windowAllDups()
-{
-    Window::applyWindow(prevDup, window);
-    Window::applyWindow(horseDup, window);
-    Window::applyWindow(currDup, window);
+    return windowing(getCurrent());
 }

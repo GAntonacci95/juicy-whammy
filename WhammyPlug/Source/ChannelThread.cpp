@@ -1,24 +1,32 @@
 #include "ChannelThread.h"
 
-ChannelThread::ChannelThread(const String& threadName, WaitableEvent* waitToken, uint sampleRate, size_t samplePerBlock) 
+ChannelThread::ChannelThread(const String& threadName, WaitableEvent* waitToken, uint sampleRate, Window* window)
     : Thread(threadName)
 {
-
-    token = waitToken;
-    shifter = new SoundTouch();
-    isConfiged = false;
+    this->token = waitToken;
+    this->shifter = new SoundTouch();
+    this->reg = new CustomRegister(window);
+    this->interpolator = new LagrangeInterpolator();
+    this->isConfiged = false;
     
     // HI latency? -> combo (QUICK = true, AA = false)
-    shifter->setSetting(SETTING_USE_QUICKSEEK, false);
-    shifter->setSetting(SETTING_USE_AA_FILTER, true);
-    shifter->setSampleRate(sampleRate);
-    shifter->setChannels(1);
+    this->shifter->setSetting(SETTING_USE_QUICKSEEK, false);
+    this->shifter->setSetting(SETTING_USE_AA_FILTER, true);
+    this->shifter->setSampleRate(sampleRate);
+    this->shifter->setChannels(1);
 
-    shifter->setPitchSemiTones(0);
+    this->shifter->setPitchSemiTones(0);
+}
 
-    window = new Window();
-    /*windowSamples = new float[samplePerBlock];
-    window->hamming(windowSamples, samplePerBlock);*/
+// configurazione post-costruttore, preparazione
+void ChannelThread::configure(const float* inPtr)
+{
+    this->currRef = inPtr;
+    
+    readyData.resize(2 * reg->getWindow()->getBlockSize() - reg->getWindow()->getOverlapSize());
+    readyData.fill(0);
+    
+    isConfiged = true;
 }
 
 ChannelThread::~ChannelThread()
@@ -26,30 +34,10 @@ ChannelThread::~ChannelThread()
     shifter->clear();
     shifter->flush();
     delete shifter;
-    delete readyData;
-    ///////////////////////////////////////////////
-    delete inPtrWindowed;
-    delete windowSamples;
-}
-
-void ChannelThread::run()
-{
-    while(true)
-    {
-        // ! wait for the presence of new data
-        this->wait(-1);
-        // processing...
-        shifter->putSamples(inPtr, blockSize);
-        // WINDOWING DI INPTR CON FINESTRA DI HAMMING
-        memcpy(inPtrWindowed, inPtr, sizeof(float)*blockSize); // copio inPtr in inPtrWindowed
-        window->applyWindow(inPtrWindowed, windowSamples, blockSize);
-        // LAGRANGE INTERPOLATION SU SEGNALE A CUI E APPLICATA LA WINDOW
-        interpolator.LagrangeInterpolator::process(speedRatio, inPtrWindowed, readyData, speedRatio*blockSize); // 512
-        shifter->receiveSamples(readyData, blockSize);
-        // !! hey listener I'm ready!
-        // my end notification
-        token->signal();
-    }
+    delete interpolator;
+    
+    readyData.clear();
+    delete &readyData;
 }
 
 void ChannelThread::setPitchSemiTones(double currentPitch)
@@ -62,19 +50,50 @@ bool ChannelThread::isConfigured()
     return isConfiged;
 }
 
-void ChannelThread::configure(const float* inptr, int num)
-{
-    inPtr = inptr;
-    blockSize = num;
-    readyData = new float[blockSize];
-    isConfiged = true;
-    ////////////////////////////////////////////////////////////////
-    windowSamples = new float[blockSize];
-    window->hamming(windowSamples, blockSize);
-    inPtrWindowed = new float[blockSize];
-}
-
-float* ChannelThread::getReadyData()
+Array<float> ChannelThread::getReadyData()
 {
     return readyData;
+}
+
+// ------------------------------ Logica del Thread ------------------------------
+void ChannelThread::run()
+{
+    while(this->isConfigured())
+    {
+        // ! wait for the presence of new data
+        this->wait(-1);
+        
+        this->reg->leftShift(currRef);
+        
+        // pitch-shifting
+        // di frame a cavallo (del precedente col corrente)
+        horseWin = reg->getHorseWin();
+        horseWinShift.clearQuick();
+        horseWinShift.addArray(horseWin);
+        currWin = reg->getCurrentWin();
+        currWinShift.clearQuick();
+        currWinShift.addArray(currWin);
+        
+        shifter->putSamples(horseWin.data(), horseWin.size());
+        shifter->receiveSamples(horseWinShift.data(),
+                                horseWinShift.size());
+        // e di frame corrente
+        shifter->putSamples(currWin.data(), currWin.size());
+        shifter->receiveSamples(currWinShift.data(),
+                                currWinShift.size());
+        
+        // merge di horseWinShift e currWinShift (OLA, vettore eccedente)
+        Window::OLA(horseWinShift, currWinShift,
+                    reg->getWindow()->getOverlapSize(),
+                    readyDataPreInt);
+        
+        // applicazione dell'interpolazione al vettore eccedente qui sopra
+        interpolator->process(speedRatio, readyDataPreInt.data(),
+                             readyData.data(), readyData.size());
+        
+        // restituzione del vettore eccedente interpolato:
+        // !! hey listener I'm ready!
+        // my end notification
+        token->signal();
+    }
 }

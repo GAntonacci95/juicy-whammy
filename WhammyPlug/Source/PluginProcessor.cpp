@@ -100,8 +100,9 @@ void WhammyPlugAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     
     waitTokenL = new WaitableEvent();
     waitTokenR = new WaitableEvent();
-    chthL = new ChannelThread("chthL", waitTokenL, (uint)sampleRate, samplesPerBlock);
-    chthR = new ChannelThread("chthR", waitTokenR, (uint)sampleRate, samplesPerBlock);
+    window = new Window("Hamming", samplesPerBlock);
+    chthL = new ChannelThread("chthL", waitTokenL, (uint)sampleRate, window);
+//    chthR = new ChannelThread("chthR", waitTokenR, (uint)sampleRate, *window);
 }
 
 double WhammyPlugAudioProcessor::getPitchSemiTones()
@@ -127,6 +128,7 @@ void WhammyPlugAudioProcessor::releaseResources()
         delete chthR;
         delete waitTokenL;
         delete waitTokenR;
+        delete window;
     }
 }
 
@@ -171,8 +173,8 @@ void WhammyPlugAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
 
     if (!chthL->isConfigured() && !chthR->isConfigured())
     {
-       chthL->configure(buffer.getReadPointer(0), buffer.getNumSamples());
-       chthR->configure(buffer.getReadPointer(1), buffer.getNumSamples());
+       chthL->configure(buffer.getReadPointer(0));
+       chthR->configure(buffer.getReadPointer(1));
 
        chthL->startThread();
        chthR->startThread();
@@ -186,8 +188,13 @@ void WhammyPlugAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
     waitTokenR->wait();
 
     // write to output
-    buffer.copyFrom(0, 0, chthL->getReadyData(), buffer.getNumSamples());
-    buffer.copyFrom(1, 0, chthR->getReadyData(), buffer.getNumSamples());
+    // overflow in fade-out, OLA al frame successivo
+    buffer.addFrom(0, 0,
+                   chthL->getReadyData().data(),
+                   chthL->getReadyData().size());
+    buffer.addFrom(1, 0,
+                   chthR->getReadyData().data(),
+                   chthR->getReadyData().size());
 }
 
 //==============================================================================

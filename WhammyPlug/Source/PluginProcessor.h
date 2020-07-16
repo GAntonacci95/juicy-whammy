@@ -12,6 +12,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "ChannelThread.h"
+#include "Window.h"
 
 //==============================================================================
 /**
@@ -67,6 +68,7 @@ private:
     WaitableEvent* waitTokenR;
     ChannelThread* chthL;
     ChannelThread* chthR;
+    Window* window;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WhammyPlugAudioProcessor)

@@ -1,19 +1,28 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "juce_dsp/juce_dsp.h"
-#include <cmath>
 
-using namespace dsp;
-
+// TODO: Valutare attentamente l'uso dei riferimenti, ricreati o const?!
 class Window
 {
 public:
-	Window();
+	Window(const String& winName, int num);
 	~Window();
+    int getBlockSize();
+    double getHopRate();
+    void setHopRate(double rate);
+    double getOverlapRate();
+    int getHopSize();
+    int getOverlapSize();
+    float* getSamples();
+    
+    static void hamming(Window* outWindow);
+    static void applyWindow(Array<float> data, Window* window);
+    static void OLA(Array<float> first, Array<float> second, int overlapSize, Array<float> output);
 
-	void hamming(float* window, size_t size);
-	void applyWindow(float* data, float* window, size_t size);
+private:
+    int blockSize;
+    double hopRate;
+    
+    float* samples;
 };
-
-

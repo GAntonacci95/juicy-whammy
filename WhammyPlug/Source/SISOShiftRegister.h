@@ -1,33 +1,33 @@
-#ifndef CustomSISOShiftRegister_hpp
-#define CustomSISOShiftRegister_hpp
+#ifndef SISOShiftRegister_h
+#define SISOShiftRegister_h
 
 #include <JuceHeader.h>
 #include "Window.h"
 
-class CustomSISOShiftRegister
+// TODO: Valutare attentamente l'uso dei riferimenti, ricreati o const?!
+class SISOShiftRegister
 {
 public:
-    CustomSISOShiftRegister(Window* window);
-    ~CustomSISOShiftRegister();
-    Array<float>* getPrevious();
-    Array<float>* getWinPrevious();
-    Array<float>* getWinHorse();
-    Array<float>* getCurrent();
-    Array<float>* getWinCurrent();
+    SISOShiftRegister(int blockSize, int overlapSize = 0, int hopSize = 0);
+    ~SISOShiftRegister();
+    Array<float> getPrevious();
+    Array<float> getHorse();
+    Array<float> getCurrent();
     void leftShift(const float* inPtr);
     
 private:
-    Window* window;
+    int blockSize;
+    int overlapSize;
+    int hopSize;
     
-    Array<float>* prevBlock;
+    Array<float> prevBlock;
     // horse cache a cavallo
-    Array<float>* horseBlock;
-    Array<float>* currBlock;
+    Array<float> horseBlock;
+    Array<float> currBlock;
     
-    Array<float>* getWin(Array<float>* which);
     void updatePrevBlock();
     void updateCurrBlock(const float* inPtr);
     void updateHorseBlock();
 };
 
-#endif /* CustomSISOShiftRegister_hpp */
+#endif /* SISOShiftRegister_h */
