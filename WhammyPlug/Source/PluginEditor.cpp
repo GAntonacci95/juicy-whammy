@@ -40,7 +40,12 @@ WhammyPlugAudioProcessorEditor::WhammyPlugAudioProcessorEditor(WhammyPlugAudioPr
     pedal_level.setTextBoxStyle(Slider::NoTextBox, false, 90, 20);
     pedal_level.setPopupDisplayEnabled(true, true, this);
     pedal_level.setTextValueSuffix(" semitones");
-    pedal_level.onValueChange = [this](){ pedalValueChanged(&pedal_level); };
+    pedal_level.setValue(processor.currPitch, juce::dontSendNotification);
+    pedal_level.onValueChange = [this]()
+    { 
+        pedalValueChanged(&pedal_level);
+        processor.targetPitch = pedal_level.getValue();
+    };
 
     // Slider that is used to choose the amount of pitch shift
     addAndMakeVisible(&pitch_choice);
@@ -124,11 +129,15 @@ void WhammyPlugAudioProcessorEditor::resized()
 
 void WhammyPlugAudioProcessorEditor::pedalValueChanged(Slider* s)
 {
-    double tmp = s->getValue();
+    //double tmp = s->getValue();
+    processor.currPitch = s->getValue();
     // shifter update only if the slider difference is noticeable
     // in order not to make too many heavy calls
-    if (abs(tmp - processor.getPitchSemiTones()) >= 1E-3)
-        processor.setPitchSemiTones(tmp);
+    //if (abs(tmp - processor.getPitchSemiTones()) >= 1E-3)
+        //processor.setPitchSemiTones(tmp);
+
+    if (abs(processor.currPitch - processor.getPitchSemiTones()) >= 1E-3)
+        processor.setPitchSemiTones(processor.currPitch);
 }
 
 void WhammyPlugAudioProcessorEditor::pedalMaxValueSetup(int option_index)

@@ -59,7 +59,11 @@ public:
     //==============================================================================
     double getPitchSemiTones();
     void setPitchSemiTones(double pitch);
-    // WindowingFunction<float>::WindowingFunction() = default;
+
+    //==============================================================================
+    double currPitch;
+    double targetPitch;
+    //==============================================================================
 
 private:
     double currentPitch;

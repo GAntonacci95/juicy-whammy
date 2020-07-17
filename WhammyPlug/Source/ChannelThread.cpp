@@ -11,6 +11,9 @@ ChannelThread::ChannelThread(const String& threadName, WaitableEvent* waitToken,
     // HI latency? -> combo (QUICK = true, AA = false)
     shifter->setSetting(SETTING_USE_QUICKSEEK, false);
     shifter->setSetting(SETTING_USE_AA_FILTER, true);
+    /*shifter->setSetting(SETTING_SEQUENCE_MS, 100);
+    shifter->setSetting(SETTING_SEEKWINDOW_MS, 50);
+    shifter->setSetting(SETTING_OVERLAP_MS, 50);*/
     shifter->setSampleRate(sampleRate);
     shifter->setChannels(1);
 
