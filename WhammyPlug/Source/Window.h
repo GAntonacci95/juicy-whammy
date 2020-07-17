@@ -8,7 +8,7 @@ class Window
 {
 public:
 	~Window();
-    int getBlockSize();
+    int getSize();
     double getHopRate();
     double getOverlapRate();
     int getHopSize();
@@ -21,7 +21,7 @@ public:
 
 private:
     Window(int size, double hopRate);
-    int blockSize;
+    int size;
     double hopRate;
     
     float* samples;

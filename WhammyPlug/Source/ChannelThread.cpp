@@ -14,7 +14,7 @@ ChannelThread::ChannelThread(const String& threadName, WaitableEvent* waitToken,
     this->shifter->setSetting(SETTING_USE_AA_FILTER, true);
     this->shifter->setSampleRate(sampleRate);
     this->shifter->setChannels(1);
-
+    
     this->shifter->setPitchSemiTones(0);
 }
 
@@ -23,11 +23,11 @@ void ChannelThread::configure(const float* inPtr)
 {
     this->currRef = inPtr;
     
-    horseWinShift = new LilArray(reg->getWindow()->getBlockSize());
-    currWinShift = new LilArray(reg->getWindow()->getBlockSize());
+    horseWinShift = new LilArray(reg->getWindow()->getSize());
+    currWinShift = new LilArray(reg->getWindow()->getSize());
     
-    readyDataPreInt = new LilArray(reg->getWindow()->getHopSize() + reg->getWindow()->getBlockSize());
-    readyData = new LilArray(readyDataPreInt->getSize());
+    readyDataPreInt = new LilArray(reg->getWindow()->getHopSize() + reg->getWindow()->getSize());
+    readyData = new LilArray(reg->getWindow()->getSize());
     
     isConfiged = true;
 }
@@ -93,8 +93,8 @@ void ChannelThread::run()
                     reg->getWindow()->getOverlapSize(), readyDataPreInt);
         
         // applicazione dell'interpolazione al vettore eccedente qui sopra
-        interpolator->process(speedRatio, readyDataPreInt->getData(),
-                              readyData->getData(), readyData->getSize());
+        interpolator->process(((double)readyDataPreInt->getSize() / readyData->getSize()), // = 1.5 downsample rate
+                              readyDataPreInt->getData(), readyData->getData(), readyData->getSize());
         
         // restituzione del vettore eccedente interpolato:
         // !! hey listener I'm ready!

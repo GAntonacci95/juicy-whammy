@@ -1,12 +1,12 @@
 #include "CustomRegister.h"
 
 CustomRegister::CustomRegister(Window* window)
-    : SISOShiftRegister(window->getBlockSize(), window->getOverlapSize(), window->getHopSize())
+    : SISOShiftRegister(window->getSize(), window->getOverlapSize(), window->getHopSize())
 {
     this->window = window;
-    this->prevWin = new LilArray(window->getBlockSize());
-    this->horseWin = new LilArray(window->getBlockSize());
-    this->currWin = new LilArray(window->getBlockSize());
+    this->prevWin = new LilArray(window->getSize());
+    this->horseWin = new LilArray(window->getSize());
+    this->currWin = new LilArray(window->getSize());
 }
 
 CustomRegister::~CustomRegister() { }

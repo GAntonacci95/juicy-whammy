@@ -26,7 +26,6 @@ private:
     SoundTouch* shifter;
     CustomRegister* reg;
     LagrangeInterpolator* interpolator;
-    const double speedRatio = 3;
     
     LilArray* horseWinShift;
     LilArray* currWinShift;

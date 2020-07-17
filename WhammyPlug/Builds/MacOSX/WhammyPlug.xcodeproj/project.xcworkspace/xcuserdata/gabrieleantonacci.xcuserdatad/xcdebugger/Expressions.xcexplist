@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "ChannelThread::run():ChannelThread.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "juce::AudioBuffer&lt;float&gt;::addFrom(int, int, float const*, int, float):juce_AudioSampleBuffer.h">
+         <PersistentStrings>
+            <PersistentString
+               value = "size">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "Window::OLA(LilArray*, LilArray*, int, LilArray*):Window.cpp">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
