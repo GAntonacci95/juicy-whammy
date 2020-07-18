@@ -129,13 +129,9 @@ void WhammyPlugAudioProcessorEditor::resized()
 
 void WhammyPlugAudioProcessorEditor::pedalValueChanged(Slider* s)
 {
-    //double tmp = s->getValue();
     processor.currPitch = s->getValue();
     // shifter update only if the slider difference is noticeable
     // in order not to make too many heavy calls
-    //if (abs(tmp - processor.getPitchSemiTones()) >= 1E-3)
-        //processor.setPitchSemiTones(tmp);
-
     if (abs(processor.currPitch - processor.getPitchSemiTones()) >= 1E-3)
         processor.setPitchSemiTones(processor.currPitch);
 }

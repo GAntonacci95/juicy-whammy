@@ -27,10 +27,9 @@ private:
     const float* inPtr;
     int blockSize;
     float* readyData;
-    ////////////////////////////////////////////////
-    LagrangeInterpolator interpolator;
-    double speedRatio = 3;
+    LagrangeInterpolator* interpolator;
     Window* window;
+    double speedRatio = 3;
     float* windowSamples;
     float* inPtrWindowed;
 };
