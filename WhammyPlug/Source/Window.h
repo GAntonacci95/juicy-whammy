@@ -1,19 +1,25 @@
 #pragma once
 
-#include <JuceHeader.h>
-#include "juce_dsp/juce_dsp.h"
-#include <cmath>
-
-using namespace dsp;
+#include "../JuceLibraryCode/JuceHeader.h"
 
 class Window
 {
 public:
-	Window();
 	~Window();
+    int getSize();
+    double getHopRate();
+    double getOverlapRate();
+    int getHopSize();
+    int getOverlapSize();
+    float* getSamples();
+    
+    static Window* hamming(int size);
+    static void applyWindow(float* data, Window* window);
 
-	void hamming(float* window, size_t size);
-	void applyWindow(float* data, float* window, size_t size);
+private:
+    Window(int size, double hopRate);
+    int size;
+    double hopRate;
+    
+    float* samples;
 };
-
-

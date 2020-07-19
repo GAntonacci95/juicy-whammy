@@ -67,6 +67,7 @@ private:
     double currentPitch;
     WaitableEvent* waitTokenL;
     WaitableEvent* waitTokenR;
+    Window* window;
     ChannelThread* chthL;
     ChannelThread* chthR;
 

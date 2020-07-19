@@ -100,8 +100,9 @@ void WhammyPlugAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     
     waitTokenL = new WaitableEvent();
     waitTokenR = new WaitableEvent();
-    chthL = new ChannelThread("chthL", waitTokenL, (uint)sampleRate, samplesPerBlock);
-    chthR = new ChannelThread("chthR", waitTokenR, (uint)sampleRate, samplesPerBlock);
+    window = Window::hamming(samplesPerBlock);
+    chthL = new ChannelThread("chthL", waitTokenL, (uint)sampleRate, window);
+    chthR = new ChannelThread("chthR", waitTokenR, (uint)sampleRate, window);
 }
 
 double WhammyPlugAudioProcessor::getPitchSemiTones()
@@ -125,6 +126,7 @@ void WhammyPlugAudioProcessor::releaseResources()
     {
         delete chthL;
         delete chthR;
+        delete window;
         delete waitTokenL;
         delete waitTokenR;
     }
@@ -171,8 +173,8 @@ void WhammyPlugAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
 
     if (!chthL->isConfigured() && !chthR->isConfigured())
     {
-       chthL->configure(buffer.getReadPointer(0), buffer.getNumSamples());
-       chthR->configure(buffer.getReadPointer(1), buffer.getNumSamples());
+       chthL->configure(buffer.getReadPointer(0));
+       chthR->configure(buffer.getReadPointer(1));
 
        chthL->startThread();
        chthR->startThread();
