@@ -63,6 +63,7 @@
 		4292AD06234A2A8100362AB1 /* SoundTouch.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4292AD05234A2A7B00362AB1 /* SoundTouch.dylib */; };
 		4292AD07234A2A8200362AB1 /* SoundTouch.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4292AD05234A2A7B00362AB1 /* SoundTouch.dylib */; };
 		4292AD08234A2A8200362AB1 /* SoundTouch.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4292AD05234A2A7B00362AB1 /* SoundTouch.dylib */; };
+		4296BC6024C4B073000937D2 /* Window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4296BC5E24C4B072000937D2 /* Window.cpp */; };
 		42C3D5A9249A69F00045DDE2 /* ChannelThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C3D5A7249A54250045DDE2 /* ChannelThread.cpp */; };
 		43B42A57071818ECE3842FFC /* include_juce_audio_plugin_client_VST_utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = B464934759A31D76EE626B0C /* include_juce_audio_plugin_client_VST_utils.mm */; };
 		480D44554A776314FB077D19 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2986874F3931203E26671509 /* WebKit.framework */; };
@@ -141,6 +142,8 @@
 		42688504243F487A00E75783 /* PluginLookAndFeel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PluginLookAndFeel.h; path = ../../Source/PluginLookAndFeel.h; sourceTree = SOURCE_ROOT; };
 		42688505243F487B00E75783 /* PluginLookAndFeel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PluginLookAndFeel.cpp; path = ../../Source/PluginLookAndFeel.cpp; sourceTree = SOURCE_ROOT; };
 		4292AD05234A2A7B00362AB1 /* SoundTouch.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = SoundTouch.dylib; path = ../../../Libs/Builds/MacOSX/SoundTouch/SoundTouch.dylib; sourceTree = "<group>"; };
+		4296BC5E24C4B072000937D2 /* Window.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Window.cpp; path = ../../Source/Window.cpp; sourceTree = SOURCE_ROOT; };
+		4296BC5F24C4B073000937D2 /* Window.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Window.h; path = ../../Source/Window.h; sourceTree = SOURCE_ROOT; };
 		42C3D5A7249A54250045DDE2 /* ChannelThread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ChannelThread.cpp; path = ../../Source/ChannelThread.cpp; sourceTree = SOURCE_ROOT; };
 		42C3D5A8249A54250045DDE2 /* ChannelThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChannelThread.h; path = ../../Source/ChannelThread.h; sourceTree = SOURCE_ROOT; };
 		42DB65B4369FEBF779D5D5A8 /* Info-Standalone_Plugin.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-Standalone_Plugin.plist"; sourceTree = SOURCE_ROOT; };
@@ -262,6 +265,8 @@
 		0088A9025B92F166DAB25D36 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				4296BC5E24C4B072000937D2 /* Window.cpp */,
+				4296BC5F24C4B073000937D2 /* Window.h */,
 				42C3D5A7249A54250045DDE2 /* ChannelThread.cpp */,
 				42C3D5A8249A54250045DDE2 /* ChannelThread.h */,
 				42688505243F487B00E75783 /* PluginLookAndFeel.cpp */,
@@ -683,6 +688,7 @@
 				8C0E0B2E090BD29869529746 /* include_juce_audio_utils.mm in Sources */,
 				42C3D5A9249A69F00045DDE2 /* ChannelThread.cpp in Sources */,
 				19B6C002A45FFA9CD67F24C4 /* include_juce_core.mm in Sources */,
+				4296BC6024C4B073000937D2 /* Window.cpp in Sources */,
 				0BAD35A581F1B6492A716395 /* include_juce_cryptography.mm in Sources */,
 				42688506243F534B00E75783 /* PluginLookAndFeel.cpp in Sources */,
 				6933EDEEE897A1F6BB07A359 /* include_juce_data_structures.mm in Sources */,
