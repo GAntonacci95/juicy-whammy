@@ -30,7 +30,7 @@ Libs/Sources/SoundTouch/SoundTouch.vs/x64/Debug
 3Tones
 *.mp3
 *.txt
-*.pptx
+WhammyPlug.pptx
 *.mp4
 
 # dependencies
